@@ -1,0 +1,28 @@
+{
+  "name": "gamecontrol",
+  "version": "0.0.1",
+  "description": "A JavaScript library that lets you handle, configure, and use gamepad and controllers on a browser, using the Gamepad API",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "node_modules/.bin/webpack --output-filename gamecontrol.js --mode development"
+  },
+  "devDependencies": {
+    "jest": "^24.9.0",
+    "webpack": "^4.39.2",
+    "webpack-cli": "^3.3.7"
+  },
+  "homepage": "https://alvaromontoro.com/",
+  "author": "Alvaro Montoro (alvaromontoro@gmail.com",
+  "license": "MIT",
+  "keywords": [
+    "game control",
+    "gamepad",
+    "game controller",
+    "game control",
+    "controller",
+    "gaming",
+    "web api",
+    "html5 api",
+    "gamepad api"
+  ]
+}
