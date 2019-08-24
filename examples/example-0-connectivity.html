@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>GameControl Example: Connectivity</title>
+    <link rel="stylesheet" href="./examples.css" />
+    <style>
+      #info {
+        text-align: center;
+        margin: 2rem;
+      }
+      #round-button {
+        width: 100px;
+        height: 100px;
+        border: 5px solid rgba(0, 0, 0, 0.5);
+        border-radius: 100%;
+        background: #ccc;
+        margin: auto auto;
+      }
+      #round-button.disconnected {
+        background: #dd4433;
+      }
+      #round-button.connected {
+        background: #33aa44;
+      }
+      #status {
+        margin-top: 0.5rem;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Example: Connectivity</h1>
+      <p>Plug and unplug your gamepad(s) and see the changes below:</p>
+      <div id="info">
+        <div id="round-button"></div>
+        <div id="status">Waiting...</div>
+      </div>
+      <p class="note">
+        In some browsers, you may need to press a button after plugging in the gamepad.
+      </p>
+      <h2>How it works</h2>
+      <p>There are two event associated to gameControl that you can use:</p>
+      <ul>
+        <li><code>connect</code>: triggered when a gamepad is connected to the browser.</li>
+        <li><code>disconnect</code>: triggered when a gamepad is disconnected from the browser.</li>
+      </ul>
+      <p>
+        And an event handler can be easily associated to any of them using the
+        <code>.on()</code> method:
+      </p>
+      <p>
+        <code>
+          gameControl.on(NAME_OF_EVENT, CALLBACK);
+        </code>
+      </p>
+      <p>As an example, here is the code that manages the interaction above:</p>
+      <pre class="code"><code>gameControl.on('connect', function() {
+  document.querySelector('#round-button').className = 'connected';
+  document.querySelector('#status').textContent = 'Device connected!';
+});
+
+gameControl.on('disconnect', function() {
+  document.querySelector('#round-button').className = 'disconnected';
+  document.querySelector('#status').textContent = 'Device disconnected!';
+});</code></pre>
+    </main>
+    <script src="../dist/gamecontrol.js"></script>
+    <script>
+      gameControl.on('connect', function() {
+        document.querySelector('#round-button').className = 'connected';
+        document.querySelector('#status').textContent = 'Device connected!';
+      });
+
+      gameControl.on('disconnect', function() {
+        document.querySelector('#round-button').className = 'disconnected';
+        document.querySelector('#status').textContent = 'Device disconnected!';
+      });
+    </script>
+  </body>
+</html>
