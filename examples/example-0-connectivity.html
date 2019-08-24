@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <title>GameControl Example: Connectivity</title>
     <link rel="stylesheet" href="./examples.css" />
@@ -68,12 +68,12 @@ gameControl.on('disconnect', function() {
     <script>
       gameControl.on('connect', function() {
         document.querySelector('#round-button').className = 'connected';
-        document.querySelector('#status').textContent = 'Device connected!';
+        document.querySelector('#status').textContent = 'Gamepad connected!';
       });
 
       gameControl.on('disconnect', function() {
         document.querySelector('#round-button').className = 'disconnected';
-        document.querySelector('#status').textContent = 'Device disconnected!';
+        document.querySelector('#status').textContent = 'Gamepad disconnected!';
       });
     </script>
   </body>

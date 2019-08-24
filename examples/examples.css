@@ -1,5 +1,3 @@
-/* Sorry, only desktop styles */
-
 html,
 body {
   background: #666;
@@ -20,31 +18,35 @@ main {
   border: 1rem solid #333;
   border-radius: 0.25rem;
   color: #222;
-  margin: 3rem;
-  padding: 2rem;
   flex: 1;
+  margin: 3rem auto;
+  max-width: 1000px;
+  min-width: 320px;
+  padding: 2rem;
+  width: 100%;
+  width: calc(100% - 6rem);
 }
 
 h1 {
-  margin: 0 auto 1rem auto;
   font-size: 2rem;
+  margin: 0 auto 1rem auto;
 }
 
 h2 {
-  margin: 2rem auto 1rem auto;
   font-size: 1.75rem;
+  margin: 2rem auto 1rem auto;
 }
 
 p,
 ul,
 pre.code {
-  margin: 0 0 1rem 0;
   font-size: 1.1rem;
+  margin: 0 0 1rem 0;
 }
 
 p.note {
-  border-left: 0.25rem solid #222;
   background: rgba(0, 0, 0, 0.075);
+  border-left: 0.25rem solid #222;
   padding: 0.5rem;
 }
 
@@ -55,7 +57,7 @@ p.note::before {
 
 pre.code {
   background: #333;
-  padding: 1rem;
   color: #ddd;
   overflow-x: auto;
+  padding: 1rem;
 }
