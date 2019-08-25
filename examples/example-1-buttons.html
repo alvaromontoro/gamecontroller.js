@@ -114,13 +114,20 @@ gameControl.on('disconnect', function() {
     </main>
     <script src="../dist/gamecontrol.js"></script>
     <script>
-      gameControl.on('connect', function(gp) {
-        for (let x = 0; x < gp.buttons; x++) {
-          gp.on('button' + x, function() {
-            document.querySelector('#button-' + x).classList.toggle('active', true);
-          });
-        }
-      });
+      gameControl
+        .on('connect', function(gp) {
+          for (let x = 0; x < gp.buttons; x++) {
+            gp.on('button' + x, function() {
+              document.querySelector('#button-' + x).classList.toggle('active', true);
+            });
+          }
+        })
+        .on('beforeCycle', function() {
+          const active = document.querySelectorAll('.active');
+          for (let x = 0; x < active.length; x++) {
+            active[x].classList.toggle('active', false);
+          }
+        });
     </script>
   </body>
 </html>

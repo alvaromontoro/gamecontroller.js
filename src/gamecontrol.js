@@ -6,6 +6,8 @@ const gameControl = {
   isReady: isGamepadSupported(),
   onConnect: function() {},
   onDisconnect: function() {},
+  onBeforeCycle: function() {},
+  onAfterCycle: function() {},
   getGamepads: function() {
     return this.gamepads;
   },
@@ -20,9 +22,14 @@ const gameControl = {
       window.requestAnimationFrame || window.webkitRequestAnimationFrame;
     const gamepadIds = Object.keys(gameControl.gamepads);
 
+    gameControl.onBeforeCycle();
+
     for (let x = 0; x < gamepadIds.length; x++) {
       gameControl.gamepads[gamepadIds[x]].checkStatus();
     }
+
+    gameControl.onAfterCycle();
+
     if (gamepadIds.length > 0) {
       requestAnimationFrame(gameControl.checkStatus);
     }
@@ -54,6 +61,17 @@ const gameControl = {
       case 'disconnect':
         this.onDisconnect = callback;
         break;
+      case 'beforeCycle':
+      case 'beforecycle':
+        this.onBeforeCycle = callback;
+        break;
+      case 'afterCycle':
+      case 'aftercycle':
+        this.onAfterCycle = callback;
+        break;
+      default:
+        log('Unknown event name', 'error');
+        break;
     }
     return this;
   },
@@ -64,6 +82,17 @@ const gameControl = {
         break;
       case 'disconnect':
         this.onDisconnect = function() {};
+        break;
+      case 'beforeCycle':
+      case 'beforecycle':
+        this.onBeforeCycle = function() {};
+        break;
+      case 'afterCycle':
+      case 'aftercycle':
+        this.onAfterCycle = function() {};
+        break;
+      default:
+        log('Unknown event name', 'error');
         break;
     }
     return this;
