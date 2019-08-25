@@ -59,7 +59,17 @@ const gamepad = {
       if (buttonId >= 0 && buttonId < this.buttons) {
         this.buttonActions[buttonId].action = callback;
       } else {
-        log(`Cannot associate event to button that does not exist (${buttonId})`, 'error');
+        log(`Cannot associate event to button that does not exist (${buttonId}).`, 'error');
+      }
+    } else if (eventName === 'start') {
+      this.buttonActions[9].action = callback;
+    } else if (eventName === 'select') {
+      this.buttonActions[8].action = callback;
+    } else if (eventName === 'power') {
+      if (this.buttons >= 17) {
+        this.buttonActions[16].action = callback;
+      } else {
+        log('No power button available on this gamepad.', 'error');
       }
     }
     return this;
