@@ -1,3 +1,5 @@
+import { log } from './tools';
+
 const gamepad = {
   id: '',
   buttons: 0,
@@ -52,23 +54,23 @@ const gamepad = {
     return this;
   },
   on: function(eventName, callback) {
-    if (eventName.match(/^button\d$/)) {
-      const buttonId = parseInt(eventName.match(/^button(\d)$/)[1]);
+    if (eventName.match(/^button\d+$/)) {
+      const buttonId = parseInt(eventName.match(/^button(\d+)$/)[1]);
       if (buttonId >= 0 && buttonId < this.buttons) {
         this.buttonActions[buttonId].action = callback;
       } else {
-        log('Cannot associate event to button that does not exist', 'error');
+        log(`Cannot associate event to button that does not exist (${buttonId})`, 'error');
       }
     }
     return this;
   },
   off: function(eventName) {
-    if (eventName.match(/^button\d$/)) {
-      const buttonId = parseInt(eventName.match(/^button(\d)$/)[1]);
+    if (eventName.match(/^button\d+$/)) {
+      const buttonId = parseInt(eventName.match(/^button(\d+)$/)[1]);
       if (buttonId >= 0 && buttonId < this.buttons) {
         this.buttonActions[buttonId].action = function() {};
       } else {
-        log('Cannot deassociate event to button that does not exist', 'error');
+        log(`Cannot deassociate event to button that does not exist (${buttonId})`, 'error');
       }
     }
     return this;
