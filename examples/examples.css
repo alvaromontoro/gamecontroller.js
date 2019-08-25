@@ -42,6 +42,7 @@ ul,
 pre.code {
   font-size: 1.1rem;
   margin: 0 0 1rem 0;
+  line-height: 1.5rem;
 }
 
 p.note {
@@ -53,6 +54,10 @@ p.note {
 p.note::before {
   content: 'Note: ';
   font-weight: bold;
+}
+
+p.code {
+  margin-left: 2rem;
 }
 
 pre.code {

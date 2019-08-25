@@ -22,15 +22,6 @@
         Connect a gamepad to the computer, and click on the different buttons. They will highlight
         as they are pressed.
       </p>
-
-      <p class="note">
-        This is a 17-button
-        <a href="https://w3c.github.io/gamepad/#remapping"
-          >standard gamepad layout as defined on the W3C Gamepad API definition</a
-        >. <strong>It may not match the gamepad that is connected</strong>, but it can be used to
-        see how the buttons in that gamepad match the buttons in the standard gamepad.
-      </p>
-
       <svg viewBox="0 0 600 300">
         <g fill="#ddd" stroke="#222" stroke-width="3">
           <rect x="150" y="10" width="100" height="100" rx="5" ry="5" id="button-6" />
@@ -94,23 +85,70 @@
       </svg>
 
       <p class="note">
-        In the Gamepad API, the joystick/axes are not considered buttons, so they will be processed
-        in a different way. Visit <a href="./example-2-axes.html">the second example</a> to see how
-        the axes are handled in this library.
+        This is a 17-button
+        <a href="https://w3c.github.io/gamepad/#remapping"
+          >standard gamepad layout as defined on the W3C Gamepad API definition</a
+        >. <strong>It may not match the gamepad that is connected</strong>, but it can be used to
+        see how the buttons in that gamepad match the buttons in the standard gamepad.
+      </p>
+
+      <p class="note">
+        Although in this library, the joystick/axes are handled as buttons, in this particular demo
+        we are going to focus exclusively on buttons. Visit
+        <a href="./example-2-joysticks.html">the second example</a> to see how the joysticks/axes
+        work.
       </p>
 
       <h2>How it works</h2>
-
-      <p>As an example, here is the code that manages the interaction above:</p>
-      <pre class="code"><code>gameControl.on('connect', function() {
-  document.querySelector('#round-button').className = 'connected';
-  document.querySelector('#status').textContent = 'Device connected!';
+      <p>Event handlers can be associated to the buttons using the <code>.on()</code> method:</p>
+      <p class="code"><code>gamepad.on(BUTTON_NAME, CALLBACK);</code></p>
+      <p></p>
+      <p>
+        Only one action is allowed by button. If you use several <code>.on()</code> with the same
+        button, the latest call to it will be the one that is applied when the button is pressed.
+      </p>
+      <pre class="code"><code>gameControl.on('connect', function(gamepad) {
+  gamepad.on('select', function() {
+    // do something
+  });
+});</code></pre>
+      <p>
+        Some buttons have aliases, so it is easier to associate events to them. For example, we can
+        add an event handler to the
+        <kbd>Select</kbd>/<kbd>Back</kbd> by doing one of these two:
+      </p>
+      <pre class="code"><code>gamepad.on('button8', function() {
+  // do something
 });
 
-gameControl.on('disconnect', function() {
-  document.querySelector('#round-button').className = 'disconnected';
-  document.querySelector('#status').textContent = 'Device disconnected!';
+gamepad.on('select', function() {
+  // do something
 });</code></pre>
+      <p class="note">
+        Using aliases doesn't mean that you will be able to use more than one action, as they are
+        the same.
+      </p>
+      <p>
+        The available button aliases are:
+      </p>
+      <ul>
+        <li>
+          <code>select</code>: equivalent to <code>button8</code>. (Works for <kbd>Select</kbd>/<kbd
+            >Back</kbd
+          >
+          in some gamepads)
+        </li>
+        <li>
+          <code>start</code>: equivalent to <code>button9</code>. (Works for <kbd>Start</kbd>/<kbd
+            >Forward</kbd
+          >
+          in some gamepads)
+        </li>
+        <li>
+          <code>power</code>: equivalent to <code>button16</code>. It is the power button available
+          on some gamepads (e.g. the XBox logo button)
+        </li>
+      </ul>
     </main>
     <script src="../dist/gamecontrol.js"></script>
     <script>
