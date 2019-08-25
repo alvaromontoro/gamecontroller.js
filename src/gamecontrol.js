@@ -55,6 +55,7 @@ const gameControl = {
         this.onDisconnect = callback;
         break;
     }
+    return this;
   },
   off: function(eventName) {
     switch (eventName) {
@@ -65,6 +66,7 @@ const gameControl = {
         this.onDisconnect = function() {};
         break;
     }
+    return this;
   }
 };
 

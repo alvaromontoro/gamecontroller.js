@@ -55,14 +55,24 @@ const gamepad = {
     if (eventName.match(/^button\d$/)) {
       const buttonId = parseInt(eventName.match(/^button(\d)$/)[1]);
       if (buttonId >= 0 && buttonId < this.buttons) {
-        // console.log(buttonId);
         this.buttonActions[buttonId].action = callback;
       } else {
         log('Cannot associate event to button that does not exist', 'error');
       }
     }
+    return this;
   },
-  off: function(eventName) {}
+  off: function(eventName) {
+    if (eventName.match(/^button\d$/)) {
+      const buttonId = parseInt(eventName.match(/^button(\d)$/)[1]);
+      if (buttonId >= 0 && buttonId < this.buttons) {
+        this.buttonActions[buttonId].action = function() {};
+      } else {
+        log('Cannot deassociate event to button that does not exist', 'error');
+      }
+    }
+    return this;
+  }
 };
 
 export default gamepad;
