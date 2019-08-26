@@ -18,6 +18,9 @@
     "type": "git",
     "url": "https://github.com/alvaromontoro/gamecontrol"
   },
+  "bugs": {
+    "url": "https://github.com/alvaromontoro/gamecontrol/issues"
+  },
   "homepage": "https://github.com/alvaromontoro/gamecontrol",
   "author": "Alvaro Montoro (alvaromontoro@gmail.com",
   "license": "MIT",
