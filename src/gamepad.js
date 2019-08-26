@@ -14,9 +14,26 @@ const gamepad = {
       ? navigator.webkitGetGamepads
       : [];
     const gp = gps[this.id];
-    for (let x = 0; x < this.buttons; x++) {
-      if (gp.buttons[x].pressed === true) {
-        this.buttonActions[x].action();
+    if (gp.buttons) {
+      for (let x = 0; x < this.buttons; x++) {
+        if (gp.buttons[x].pressed === true) {
+          this.buttonActions[x].action();
+        }
+      }
+    }
+    if (gp.axes) {
+      for (let x = 0; x < gp.axes.length; x++) {
+        const val = gp.axes[x].toFixed(4);
+        const axe = Math.floor(x / 2);
+        if (val >= 1.0 && x % 2 === 0) {
+          this.axesActions[axe].right.action();
+        } else if (val <= -1.0 && x % 2 === 0) {
+          this.axesActions[axe].left.action();
+        } else if (val >= 1.0 && x % 2 === 1) {
+          this.axesActions[axe].down.action();
+        } else if (val <= -1.0 && x % 2 === 1) {
+          this.axesActions[axe].up.action();
+        }
       }
     }
   },
@@ -71,7 +88,17 @@ const gamepad = {
       } else {
         log('No power button available on this gamepad.', 'error');
       }
+    } else if (eventName.match(/^(up|down|left|right)(\d+)$/)) {
+      const matches = eventName.match(/^(up|down|left|right)(\d+)$/);
+      const direction = matches[1];
+      const axe = parseInt(matches[2]);
+      if (axe >= 0 && axe < this.axes) {
+        this.axesActions[axe][direction].action = callback;
+      } else {
+        log(`Cannot associate '${direction}' to axe that does not exist (${axe}).`, 'error');
+      }
     }
+
     return this;
   },
   off: function(eventName) {
@@ -81,6 +108,25 @@ const gamepad = {
         this.buttonActions[buttonId].action = function() {};
       } else {
         log(`Cannot deassociate event to button that does not exist (${buttonId})`, 'error');
+      }
+    } else if (eventName === 'start') {
+      this.buttonActions[9].action = function() {};
+    } else if (eventName === 'select') {
+      this.buttonActions[8].action = function() {};
+    } else if (eventName === 'power') {
+      if (this.buttons >= 17) {
+        this.buttonActions[16].action = function() {};
+      } else {
+        log('No power button available on this gamepad.', 'error');
+      }
+    } else if (eventName.match(/^(up|down|left|right)(\d+)$/)) {
+      const matches = eventName.match(/^(up|down|left|right)(\d+)$/);
+      const direction = matches[1];
+      const axe = parseInt(matches[2]);
+      if (axe >= 0 && axe < this.axes) {
+        this.axesActions[axe][direction].action = function() {};
+      } else {
+        log(`Cannot deassociate '${direction}' to axe that does not exist (${axe}).`, 'error');
       }
     }
     return this;

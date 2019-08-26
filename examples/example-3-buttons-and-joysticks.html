@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>GameControl Example: Buttons</title>
+    <title>GameControl Example: Buttons and Joysticks</title>
     <link rel="stylesheet" href="./examples.css" />
     <style>
       svg {
@@ -13,14 +13,17 @@
       .active {
         fill: yellow;
       }
+      path.active {
+        fill: red;
+      }
     </style>
   </head>
   <body>
     <main>
-      <h1>Example: Buttons</h1>
+      <h1>Example: Buttons and Joysticks</h1>
       <p>
-        Connect a gamepad to the computer, and click on the different buttons. They will highlight
-        as they are pressed.
+        Connect a gamepad to the computer, and click the buttons or move the different
+        joysticks/axes. They will highlight as they are pressed.
       </p>
       <svg viewBox="0 0 600 300">
         <g fill="#ddd" stroke="#222" stroke-width="3">
@@ -36,6 +39,14 @@
           <circle cx="400" cy="200" r="35" />
           <circle cx="200" cy="200" r="15" id="button-10" />
           <circle cx="400" cy="200" r="15" id="button-11" />
+          <path d="M190,182 210,182 200,168 Z" stroke-width="0" id="axe-0-up" />
+          <path d="M190,218 210,218 200,232 Z" stroke-width="0" id="axe-0-down" />
+          <path d="M218,190 218,210 232,200 Z" stroke-width="0" id="axe-0-right" />
+          <path d="M182,190 182,210 168,200 Z" stroke-width="0" id="axe-0-left" />
+          <path d="M390,182 410,182 400,168 Z" stroke-width="0" id="axe-1-up" />
+          <path d="M390,218 410,218 400,232 Z" stroke-width="0" id="axe-1-down" />
+          <path d="M418,190 418,210 432,200 Z" stroke-width="0" id="axe-1-right" />
+          <path d="M382,190 382,210 368,200 Z" stroke-width="0" id="axe-1-left" />
 
           <circle cx="480" cy="160" r="15" id="button-0" />
           <circle cx="510" cy="130" r="15" id="button-1" />
@@ -89,65 +100,14 @@
         <a href="https://w3c.github.io/gamepad/#remapping"
           >standard gamepad layout as defined on the W3C Gamepad API definition</a
         >. <strong>It may not match the gamepad that is connected</strong>, but it can be used to
-        see how the buttons in that gamepad match the buttons in the standard gamepad.
-      </p>
-
-      <p class="note">
-        Although in this library, the joystick/axes are handled as buttons, in this particular demo
-        we are going to focus exclusively on buttons. Visit
-        <a href="./example-2-joysticks.html">the second example</a> to see how the joysticks/axes
-        work.
+        see how the buttons/joysticks in that gamepad match the buttons in the standard gamepad.
       </p>
 
       <h2>How it works</h2>
-      <p>Event handlers can be associated to the buttons using the <code>.on()</code> method:</p>
-      <p class="code"><code>gamepad.on(BUTTON_NAME, CALLBACK);</code></p>
-
-      <p>
-        Only one action is allowed by button. If you use several <code>.on()</code> with the same
-        button, the latest call to it will be the one that is applied when the button is pressed.
-      </p>
-      <pre class="code"><code>gameControl.on('connect', function(gamepad) {
-  gamepad.on('select', function() {
-    // do something
-  });
-});</code></pre>
-      <p>
-        Some buttons have aliases, so it is easier to associate events to them. For example, we can
-        add an event handler to the
-        <kbd>Select</kbd>/<kbd>Back</kbd> by doing one of these two:
-      </p>
-      <pre class="code"><code>gamepad.on('button8', function() {
-  // do something
-});
-
-gamepad.on('select', function() {
-  // do something
-});</code></pre>
-      <p class="note">
-        Using aliases doesn't mean that you will be able to use more than one action, as they are
-        the same.
-      </p>
-      <p>
-        The available button aliases are:
-      </p>
+      <p>To see how it works visit the specific examples:</p>
       <ul>
-        <li>
-          <code>select</code>: equivalent to <code>button8</code>. (Works for <kbd>Select</kbd>/<kbd
-            >Back</kbd
-          >
-          in some gamepads)
-        </li>
-        <li>
-          <code>start</code>: equivalent to <code>button9</code>. (Works for <kbd>Start</kbd>/<kbd
-            >Forward</kbd
-          >
-          in some gamepads)
-        </li>
-        <li>
-          <code>power</code>: equivalent to <code>button16</code>. It is the power button available
-          on some gamepads (e.g. the XBox logo button)
-        </li>
+        <li><a href="./example-1-buttons.html">Example 1: Buttons</a></li>
+        <li><a href="./example-2-joysticks.html">Example 2: Joysticks</a></li>
       </ul>
     </main>
     <script src="../dist/gamecontrol.js"></script>
@@ -158,6 +118,16 @@ gamepad.on('select', function() {
             gp.on('button' + x, function() {
               document.querySelector('#button-' + x).classList.toggle('active', true);
             });
+          }
+          for (let x = 0; x < gp.axes; x++) {
+            const directions = ['up', 'down', 'right', 'left'];
+            for (let d = 0; d < directions.length; d++) {
+              gp.on(directions[d] + x, function() {
+                document
+                  .querySelector('#axe-' + x + '-' + directions[d])
+                  .classList.toggle('active', true);
+              });
+            }
           }
         })
         .on('beforeCycle', function() {
