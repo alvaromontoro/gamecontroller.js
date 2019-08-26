@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>GameControl Example: Alvanoid</title>
+    <link
+      href="https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      html,
+      body {
+        background: #eee;
+        color: #123;
+        font-family: 'Press Start 2P', Arial, sans-serif;
+        font-size: 16px;
+      }
+
+      h1 {
+        font-size: 3.15rem;
+        margin: 0;
+        text-transform: uppercase;
+        text-align: center;
+        margin-bottom: 0.5rem;
+      }
+
+      h1 + div {
+        margin-bottom: 0.5rem;
+        font-size: 1.25rem;
+      }
+
+      #frame {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        -webkit-transform: translate(-50%, -50%);
+      }
+
+      #board {
+        width: 400px;
+        height: 600px;
+        background: #123;
+        position: relative;
+      }
+
+      .tile {
+        width: 60px;
+        height: 30px;
+        box-sizing: border-box;
+        border: 2px outset rgba(255, 255, 255, 0.75);
+        position: absolute;
+        border-radius: 4px;
+      }
+
+      .tile.hidden {
+        opacity: 0.1;
+      }
+
+      .tile[id$='0'] {
+        left: 20px;
+      }
+      .tile[id$='1'] {
+        left: 80px;
+      }
+      .tile[id$='2'] {
+        left: 140px;
+      }
+      .tile[id$='3'] {
+        left: 200px;
+      }
+      .tile[id$='4'] {
+        left: 260px;
+      }
+      .tile[id$='5'] {
+        left: 320px;
+      }
+
+      .tile.red {
+        background: #d50000;
+      }
+      .tile.blue {
+        background: #0000d5;
+      }
+      .tile.green {
+        background: #009500;
+      }
+      .tile.yellow {
+        background: #d5d500;
+      }
+
+      .tile[data-row='0'] {
+        top: 100px;
+      }
+      .tile[data-row='1'] {
+        top: 130px;
+      }
+      .tile[data-row='2'] {
+        top: 160px;
+      }
+      .tile[data-row='3'] {
+        top: 190px;
+      }
+
+      #paddle {
+        width: 70px;
+        height: 15px;
+        background: #222;
+        border-radius: 100px;
+        box-sizing: border-box;
+        border: 2px outset rgba(255, 255, 255, 0.75);
+        position: absolute;
+        top: 550px;
+        left: 165px;
+      }
+
+      #ball {
+        width: 10px;
+        height: 10px;
+        border-radius: 100%;
+        border-radius: 100px;
+        box-sizing: border-box;
+        background: white;
+        border: 2px outset rgba(0, 0, 0, 0.125);
+        position: absolute;
+        top: 540px;
+        left: 195px;
+      }
+
+      footer {
+        position: absolute;
+        bottom: 0.5rem;
+        left: 0.5rem;
+        color: #333;
+        font-family: arial, sans-serif;
+        font-size: 0.85rem;
+      }
+
+      footer a {
+        color: #000;
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+
+  <body>
+    <main>
+      <div id="frame">
+        <h1>Alvanoid</h1>
+        <div>Points: <span id="points">0</span></div>
+        <div id="board">
+          <div id="tile-00" class="tile red" data-row="0"></div>
+          <div id="tile-01" class="tile red" data-row="0"></div>
+          <div id="tile-02" class="tile red" data-row="0"></div>
+          <div id="tile-03" class="tile red" data-row="0"></div>
+          <div id="tile-04" class="tile red" data-row="0"></div>
+          <div id="tile-05" class="tile red" data-row="0"></div>
+
+          <div id="tile-10" class="tile blue" data-row="1"></div>
+          <div id="tile-11" class="tile blue" data-row="1"></div>
+          <div id="tile-12" class="tile blue" data-row="1"></div>
+          <div id="tile-13" class="tile blue" data-row="1"></div>
+          <div id="tile-14" class="tile blue" data-row="1"></div>
+          <div id="tile-15" class="tile blue" data-row="1"></div>
+
+          <div id="tile-20" class="tile green" data-row="2"></div>
+          <div id="tile-21" class="tile green" data-row="2"></div>
+          <div id="tile-22" class="tile green" data-row="2"></div>
+          <div id="tile-23" class="tile green" data-row="2"></div>
+          <div id="tile-24" class="tile green" data-row="2"></div>
+          <div id="tile-25" class="tile green" data-row="2"></div>
+
+          <div id="ball"></div>
+          <div id="paddle"></div>
+        </div>
+      </div>
+      <footer>
+        This example is based on
+        <a href="https://codepen.io/alvaromontoro/full/487a1ec87ee94b38ee9a3073dd7ead1c"
+          >Alvaro Montoro's CodePen</a
+        >.
+      </footer>
+    </main>
+
+    <script src="../dist/gamecontroller.js"></script>
+    <script>
+      const boardBox = document.querySelector('#board').getBoundingClientRect();
+      let gamepad = null;
+
+      alvanoid = {
+        points: 0,
+        speed: 9,
+        offset: 165,
+        active: false,
+        paddle: null,
+        ball: null,
+        speedBall: [0, 0],
+        posBall: [195, 540],
+        gameOver: false,
+        calculatePositionBall: function(speed, position, active) {
+          let x = position[0] + speed[0];
+          let y = position[1] + speed[1];
+
+          if (active) {
+            if (x < 0) {
+              x = -x;
+              this.speedBall[0] = -this.speedBall[0];
+            }
+            if (x > 390) {
+              x = 390 - (x - 390);
+              this.speedBall[0] = -this.speedBall[0];
+            }
+
+            if (y > 590) {
+              this.gameOver = true;
+            }
+            if (y < 0) {
+              y = -y;
+              this.speedBall[1] = -this.speedBall[1];
+            }
+            if (y >= 540 && y < 550) {
+              if (x >= this.offset && x <= this.offset + 70) {
+                y = 540 - (y - 540);
+                this.speedBall[1] = -this.speedBall[1];
+              }
+            }
+
+            const tiles = document.querySelectorAll('.tile:not(.hidden)');
+            for (let i = 0; i < tiles.length; i++) {
+              const pos = tiles[i].getBoundingClientRect();
+              const tilePosX = pos.left - boardBox.left;
+              const tilePosY = pos.top - boardBox.top;
+              let change = false;
+              if (this.speedBall[0] > 0) {
+                if (x >= tilePosX && x <= tilePosX + 3 && y >= tilePosY && y <= tilePosY + 30) {
+                  tiles[i].classList.add('hidden');
+                  x = tilePosX - (x - tilePosX);
+                  this.speedBall[0] = -this.speedBall[0];
+                  change = true;
+                }
+              } else {
+                if (
+                  x <= tilePosX + 60 &&
+                  x >= tilePosX + 57 &&
+                  y >= tilePosY &&
+                  y <= tilePosY + 30
+                ) {
+                  tiles[i].classList.add('hidden');
+                  x = tilePosX + 60 - (tilePosX + 60 - x);
+                  this.speedBall[0] = -this.speedBall[0];
+                  change = true;
+                }
+              }
+              if (this.speedBall[1] > 0 && !change) {
+                if (y >= tilePosY && y <= tilePosY + 3 && x >= tilePosX && x <= tilePosX + 60) {
+                  tiles[i].classList.add('hidden');
+                  y = tilePosY - (y - tilePosY);
+                  this.speedBall[1] = -this.speedBall[1];
+                  change = true;
+                }
+              } else if (!change) {
+                if (
+                  y <= tilePosY + 30 &&
+                  y >= tilePosY + 27 &&
+                  x >= tilePosX &&
+                  x <= tilePosX + 60
+                ) {
+                  tiles[i].classList.add('hidden');
+                  y = tilePosY - (tilePosY - y);
+                  this.speedBall[1] = -this.speedBall[1];
+                  change = true;
+                }
+              }
+
+              if (change) {
+                this.points += 100;
+                document.querySelector('#points').textContent = this.points;
+              }
+            }
+          }
+
+          return { x, y };
+        },
+        paintItems: function() {
+          const coordinates = alvanoid.calculatePositionBall(
+            alvanoid.speedBall,
+            alvanoid.posBall,
+            alvanoid.active
+          );
+          alvanoid.posBall = [coordinates.x, coordinates.y];
+
+          if (!alvanoid.active) {
+            alvanoid.posBall = [alvanoid.offset + 30, 540];
+          }
+
+          alvanoid.paddle.style.left = alvanoid.offset + 'px';
+          alvanoid.ball.style.left = alvanoid.posBall[0] + 'px';
+          alvanoid.ball.style.top = alvanoid.posBall[1] + 'px';
+
+          if (!alvanoid.gameOver) {
+            requestAnimationFrame(alvanoid.paintItems);
+          }
+        },
+        move: function(change) {
+          this.offset += change;
+          if (this.offset < 0) this.offset = 0;
+          if (this.offset > 330) this.offset = 330;
+        },
+        restart: function() {
+          if (alvanoid.gameOver) {
+            setTimeout(alvanoid.paintItems, 100);
+          }
+          alvanoid.points = 0;
+          alvanoid.speed = 10;
+          alvanoid.offset = 165;
+          alvanoid.active = false;
+          alvanoid.speedBall = [0, 0];
+          alvanoid.posBall = [195, 540];
+          alvanoid.gameOver = false;
+          document.querySelector('#points').textContent = '0';
+
+          const tiles = document.querySelectorAll('.tile.hidden');
+          for (let x = 0; x < tiles.length; x++) {
+            tiles[x].classList.remove('hidden');
+          }
+        },
+        startGame: function() {
+          if (!alvanoid.active) {
+            alvanoid.speedBall = [3, -3];
+            alvanoid.active = true;
+            alvanoid.gameOver = false;
+          }
+        },
+        moveRight: function() {
+          alvanoid.move(alvanoid.speed);
+        },
+        moveLeft: function() {
+          alvanoid.move(-alvanoid.speed);
+        },
+        init: function() {
+          const self = this;
+          self.paddle = document.querySelector('#paddle');
+          self.ball = document.querySelector('#ball');
+          requestAnimationFrame(alvanoid.paintItems);
+        }
+      };
+
+      gameControl.on('connect', gamepad => {
+        alvanoid.init();
+        gamepad.on('select', alvanoid.restart);
+        gamepad.on('start', alvanoid.startGame);
+        gamepad.on('right', alvanoid.moveRight);
+        gamepad.on('left', alvanoid.moveLeft);
+      });
+    </script>
+  </body>
+</html>

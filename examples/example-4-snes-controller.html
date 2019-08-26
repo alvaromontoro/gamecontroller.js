@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>GameControl Example: SNES controller</title>
+    <link
+      href="https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      html,
+      body {
+        font-size: 16px;
+        font-family: 'Press Start 2P', arial, sans-serif;
+      }
+
+      .scrim {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        display: none;
+      }
+
+      .scrim.open {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .scrim h2 {
+        max-width: 80%;
+        font-size: 1.5rem;
+        line-height: 2rem;
+      }
+
+      .scrim svg {
+        width: 80%;
+        max-width: 600px;
+      }
+
+      .active {
+        fill: yellow;
+        stroke: yellow;
+      }
+
+      footer {
+        position: absolute;
+        bottom: 0.5rem;
+        left: 0.5rem;
+        color: #ddd;
+        font-family: arial, sans-serif;
+        font-size: 0.85rem;
+      }
+
+      footer a {
+        color: white;
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+
+  <body>
+    <main>
+      <section id="step-1" class="scrim open" data-intstep="0">
+        <h2>Connect your gamepad<br />and press any button...</h2>
+        <svg viewBox="0 0 250 110">
+          <g fill="#aaaaaa">
+            <rect
+              width="60"
+              height="30"
+              rx="10"
+              ry="10"
+              x="25"
+              y="5"
+              id="button-l"
+              class="button"
+            />
+            <rect
+              width="60"
+              height="30"
+              rx="10"
+              ry="10"
+              x="165"
+              y="5"
+              id="button-r"
+              class="button"
+            />
+          </g>
+          <rect x="50" y="10" width="150" height="90" fill="#cfcfcd" />
+          <circle cx="50" cy="60" r="50" fill="#cfcfcd" />
+          <circle cx="200" cy="60" r="50" fill="#cfcfcd" />
+          <circle cx="200" cy="60" r="45" fill="#a5a7a4" />
+          <circle cx="50" cy="60" r="28" fill="#c8c8c8" />
+          <g fill="#cfcfcd" stroke="#cfcfcd" stroke-width="25" stroke-linecap="round">
+            <path d="M180,60 200,40" />
+            <path d="M202,82 222,62" />
+          </g>
+          <circle cx="200" cy="40" r="10" fill="#000080" id="button-x" class="button" />
+          <circle cx="180" cy="60" r="10" fill="#009922" id="button-y" class="button" />
+          <circle cx="222" cy="62" r="10" fill="#cc0000" id="button-a" class="button" />
+          <circle cx="202" cy="82" r="10" fill="#ccbb00" id="button-b" class="button" />
+          <g fill="#444" stroke="#444" stroke-width="5" stroke-linecap="round">
+            <path d="M100,70 110,60" id="button-select" class="button" />
+            <path d="M125,70 135,60" id="button-start" class="button" />
+          </g>
+          <path
+            d="M43,53 43,39 57,39 57,53 71,53 71,67 57,67 57,81 43,81 43,67 29,67 29,53 43,53Z"
+            fill="#444"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <g fill="#333">
+            <path d="M 45,51 50,41 55,51 Z" id="button-up" class="button" />
+            <path d="M 59,55 69,60 59,65 Z" id="button-right" class="button" />
+            <path d="M 45,69 50,79 55,69 Z" id="button-down" class="button" />
+            <path d="M 41,55 31,60 41,65 Z" id="button-left" class="button" />
+            <circle cx="50" cy="60" r="3" id="button-center" class="button" />
+          </g>
+          <g
+            dominant-baseline="middle"
+            text-anchor="middle"
+            fill="#cfcfcd"
+            font-size="8"
+            font-family="'Arial Narrow',Arial,sans-serif"
+          >
+            <text x="215" y="30">X</text>
+            <text x="235" y="49">A</text>
+            <text x="167" y="75">Y</text>
+            <text x="190" y="97">B</text>
+            <text x="130" y="80" fill="#999" font-size="6">START</text>
+            <text x="105" y="80" fill="#999" font-size="6">SELECT</text>
+          </g>
+        </svg>
+      </section>
+      <footer>
+        This example is based on
+        <a href="https://codepen.io/alvaromontoro/full/bGbpmvR">Alvaro Montoro's CodePen</a>.
+      </footer>
+    </main>
+
+    <script src="../dist/gamecontroller.min.js"></script>
+    <script>
+      gameControl
+        .on('connect', gamepad => {
+          gamepad.on('up', () => document.querySelector('#button-up').classList.add('active'));
+          gamepad.on('down', () => document.querySelector('#button-down').classList.add('active'));
+          gamepad.on('left', () => document.querySelector('#button-left').classList.add('active'));
+          gamepad.on('right', () => document.querySelector('#button-right').classList.add('active'));
+          gamepad.on('start', () => document.querySelector('#button-start').classList.add('active'));
+          gamepad.on('select', () => document.querySelector('#button-select').classList.add('active'));
+          gamepad.on('l1', () => document.querySelector('#button-l').classList.add('active'));
+          gamepad.on('r1', () => document.querySelector('#button-r').classList.add('active'));
+          gamepad.on('button0', () => document.querySelector('#button-b').classList.add('active'));
+          gamepad.on('button1', () => document.querySelector('#button-a').classList.add('active'));
+          gamepad.on('button2', () => document.querySelector('#button-y').classList.add('active'));
+          gamepad.on('button3', () => document.querySelector('#button-x').classList.add('active'));
+        })
+        .on('beforeCycle', () => {
+          document.querySelectorAll('.active').forEach(e => e.classList.remove('active'));
+        });
+    </script>
+  </body>
+</html>
