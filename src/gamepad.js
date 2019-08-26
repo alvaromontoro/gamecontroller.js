@@ -44,27 +44,22 @@ const gamepad = {
     this.mapping = gp.mapping;
     for (let x = 0; x < this.buttons; x++) {
       this.buttonActions[x] = {
-        action: function() {},
-        after: function() {}
+        action: function() {}
       };
     }
     for (let x = 0; x < this.axes; x++) {
       this.axesActions[x] = {
         down: {
-          action: function() {},
-          after: function() {}
+          action: function() {}
         },
         left: {
-          action: function() {},
-          after: function() {}
+          action: function() {}
         },
         right: {
-          action: function() {},
-          after: function() {}
+          action: function() {}
         },
         up: {
-          action: function() {},
-          after: function() {}
+          action: function() {}
         }
       };
     }

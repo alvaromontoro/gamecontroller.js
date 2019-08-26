@@ -8,7 +8,7 @@ A JavaScript library that lets you handle, configure, and use gamepad and contro
 
 ## Getting started
 
-GameController.js uses JavaScript and the standard [Gamepad API](https://w3c.github.io/gamepad/) and does not have any other plugin/library dependencies.
+GameController.js is a lightweight library (~5KB) that uses JavaScript and the standard [Gamepad API](https://w3c.github.io/gamepad/), and does not have any plugin/library dependencies.
 
 ### Installation
 
