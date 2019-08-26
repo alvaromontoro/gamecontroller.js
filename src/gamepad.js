@@ -77,6 +77,14 @@ const gamepad = {
       this.buttonActions[9].action = callback;
     } else if (eventName === 'select') {
       this.buttonActions[8].action = callback;
+    } else if (eventName === 'r1') {
+      this.buttonActions[5].action = callback;
+    } else if (eventName === 'r2') {
+      this.buttonActions[7].action = callback;
+    } else if (eventName === 'l1') {
+      this.buttonActions[4].action = callback;
+    } else if (eventName === 'l2') {
+      this.buttonActions[6].action = callback;
     } else if (eventName === 'power') {
       if (this.buttons >= 17) {
         this.buttonActions[16].action = callback;
@@ -92,6 +100,9 @@ const gamepad = {
       } else {
         log(`Cannot associate '${direction}' to axe that does not exist (${axe}).`, 'error');
       }
+    } else if (eventName.match(/^(up|down|left|right)$/)) {
+      const direction = eventName.match(/^(up|down|left|right)$/)[1];
+      this.axesActions[0][direction].action = callback;
     }
 
     return this;
@@ -108,6 +119,14 @@ const gamepad = {
       this.buttonActions[9].action = function() {};
     } else if (eventName === 'select') {
       this.buttonActions[8].action = function() {};
+    } else if (eventName === 'r1') {
+      this.buttonActions[5].action = function() {};
+    } else if (eventName === 'r2') {
+      this.buttonActions[7].action = function() {};
+    } else if (eventName === 'l1') {
+      this.buttonActions[4].action = function() {};
+    } else if (eventName === 'l2') {
+      this.buttonActions[6].action = function() {};
     } else if (eventName === 'power') {
       if (this.buttons >= 17) {
         this.buttonActions[16].action = function() {};
@@ -123,6 +142,9 @@ const gamepad = {
       } else {
         log(`Cannot deassociate '${direction}' to axe that does not exist (${axe}).`, 'error');
       }
+    } else if (eventName.match(/^(up|down|left|right)$/)) {
+      const direction = eventName.match(/^(up|down|left|right)$/)[1];
+      this.axesActions[0][direction].action = function() {};
     }
     return this;
   }
