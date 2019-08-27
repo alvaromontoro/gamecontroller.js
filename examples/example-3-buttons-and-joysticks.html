@@ -104,10 +104,68 @@
       </p>
 
       <h2>How it works</h2>
-      <p>To see how it works visit the specific examples:</p>
+      <p>Event handlers can be associated to the buttons using the <code>.on()</code> method:</p>
+      <p class="code"><code>gamepad.on(DIRECTION_NAME+AXE_ID, CALLBACK);</code></p>
+      <p></p>
+      <p>
+        Only one action is allowed by button/joystick/axe. If you use several
+        <code>.on()</code> with the same direction, the latest call to it will be the one that is
+        applied when the joystick is pressed.
+      </p>
+      <pre class="code"><code>gameControl.on('connect', function(gamepad) {
+  gamepad.on('select', function() {
+    // do something
+  });
+});</code></pre>
+      <p>
+        Some buttons/directions have aliases, so it is easier to associate events to them. For
+        example, if we only use the name of the direction ("up", "dowm", "right", or "left"), the
+        event handler will be associated to that direction in the first joystick/axe:
+      </p>
+      <pre class="code"><code>gamepad.on('up0', function() {
+  // do something
+});
+
+gamepad.on('up', function() {
+  // do something
+});</code></pre>
+      <p class="note">
+        Using aliases doesn't mean that you will be able to use more than one action per direction,
+        as they are the same.
+      </p>
+      <p>
+        The available direction aliases are:
+      </p>
       <ul>
-        <li><a href="./example-1-buttons.html">Example 1: Buttons</a></li>
-        <li><a href="./example-2-joysticks.html">Example 2: Joysticks</a></li>
+        <li><code>up</code>: equivalent to <code>up0</code>.</li>
+        <li><code>down</code>: equivalent to <code>down0</code>.</li>
+        <li><code>right</code>: equivalent to <code>right0</code>.</li>
+        <li><code>left</code>: equivalent to <code>left0</code>.</li>
+      </ul>
+      <p>
+        The available button aliases are:
+      </p>
+      <ul>
+        <li><code>l1</code>: equivalent to <code>button4</code>. Left back button 1</li>
+        <li><code>l2</code>: equivalent to <code>button6</code>. Left back button 2</li>
+        <li><code>r1</code>: equivalent to <code>button5</code>. Right back button 1</li>
+        <li><code>r2</code>: equivalent to <code>button7</code>. Right back button 2</li>
+        <li>
+          <code>select</code>: equivalent to <code>button8</code>. (Works for <kbd>Select</kbd>/<kbd
+            >Back</kbd
+          >
+          in some gamepads)
+        </li>
+        <li>
+          <code>start</code>: equivalent to <code>button9</code>. (Works for <kbd>Start</kbd>/<kbd
+            >Forward</kbd
+          >
+          in some gamepads)
+        </li>
+        <li>
+          <code>power</code>: equivalent to <code>button16</code>. It is the power button available
+          on some gamepads (e.g. the XBox logo button)
+        </li>
       </ul>
     </main>
     <script src="../dist/gamecontroller.min.js"></script>
