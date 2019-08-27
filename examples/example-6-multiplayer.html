@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>GameControl Example: Multiplayer (Pong)</title>
+    <link
+      href="https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      html,
+      body {
+        background: #222;
+        font-family: 'Press Start 2P', Arial, sans-serif;
+        font-size: 16px;
+        color: #eee;
+      }
+
+      #board {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 600px;
+        height: 400px;
+        background: #222;
+        border: 5px solid #eee;
+      }
+
+      #board::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 50%;
+        height: 100%;
+        width: 5px;
+        border-left: 5px dashed #eee;
+        transform: translate(-50%, 0%);
+      }
+
+      .paddle {
+        height: 80px;
+        width: 10px;
+        background: #eee;
+        position: absolute;
+      }
+
+      #paddle-1 {
+        top: 160px;
+        left: 20px;
+      }
+
+      #paddle-2 {
+        top: 160px;
+        right: 20px;
+      }
+
+      #ball {
+        width: 10px;
+        height: 10px;
+        position: absolute;
+        background: #eee;
+        top: 190px;
+        left: 40px;
+        z-index: 1;
+      }
+
+      .score {
+        font-size: 4rem;
+        color: #aaa;
+        position: absolute;
+        top: 10px;
+      }
+
+      #score-1 {
+        right: 320px;
+      }
+
+      #score-2 {
+        left: 320px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <main>
+      <div id="board">
+        <div class="paddle" id="paddle-1"></div>
+        <div class="paddle" id="paddle-2"></div>
+        <div id="ball"></div>
+        <div class="score" id="score-1">0</div>
+        <div class="score" id="score-2">0</div>
+      </div>
+    </main>
+
+    <script src="../dist/gamecontroller.min.js"></script>
+    <script>
+      const pong = {
+        points: [0, 0],
+        ball: [40, 195],
+        speed: [5, -5],
+        paddles: [160, 160],
+        paused: 0,
+        paintBoard: function() {
+          //calculate new ball position
+          pong.ball[0] += pong.speed[0];
+          pong.ball[1] += pong.speed[1];
+          if (pong.ball[1] <= 0) {
+            pong.ball[1] *= -1;
+            pong.speed[1] *= -1;
+          }
+          if (pong.ball[1] >= 390) {
+            pong.ball[1] = 390 - (pong.ball[1] - 390);
+            pong.speed[1] *= -1;
+          }
+          if (pong.ball[0] <= 0) {
+            pong.ball[0] = 0;
+            pong.points[1]++;
+            document.querySelector('#score-2').textContent = pong.points[1];
+            pong.paused = 1;
+          }
+          if (pong.ball[0] >= 590) {
+            pong.ball[0] = 590;
+            pong.points[0]++;
+            document.querySelector('#score-1').textContent = pong.points[0];
+            pong.paused = 2;
+          }
+          if (
+            pong.speed[0] > 0 &&
+            pong.ball[0] >= 560 &&
+            pong.ball[0] < 570 &&
+            pong.paddles[1] <= pong.ball[1] &&
+            pong.paddles[1] + 80 >= pong.ball[1]
+          ) {
+            pong.ball[0] = 570 - (570 - pong.ball[0]);
+            pong.speed[0] *= -1;
+          }
+          if (
+            pong.speed[0] < 0 &&
+            pong.ball[0] > 20 &&
+            pong.ball[0] <= 30 &&
+            pong.paddles[0] <= pong.ball[1] &&
+            pong.paddles[0] + 80 >= pong.ball[1]
+          ) {
+            pong.ball[0] = 30 + (pong.ball[0] - 30);
+            pong.speed[0] *= -1;
+          }
+
+          document.querySelector('#paddle-1').style.top = pong.paddles[0] + 'px';
+          document.querySelector('#paddle-2').style.top = pong.paddles[1] + 'px';
+          document.querySelector('#ball').style.left = pong.ball[0] + 'px';
+          document.querySelector('#ball').style.top = pong.ball[1] + 'px';
+          if (pong.paused == 0) {
+            requestAnimationFrame(pong.paintBoard);
+          }
+        },
+        movePaddle: function(paddle, direction) {
+          if (this.paddles[paddle] + direction < 0) {
+            this.paddles[paddle] = 0;
+          } else if (this.paddles[paddle] + direction > 320) {
+            this.paddles[paddle] = 320;
+          } else {
+            this.paddles[paddle] += direction;
+          }
+        },
+        restart: function() {
+          if (pong.paused > 0) {
+            setTimeout(pong.paintBoard, 100);
+          }
+
+          let speedHorizontal = -pong.speed[0];
+          let speedVertical = -pong.speed[1];
+          let horizontal = pong.ball[0];
+          const vertical = pong.ball[1];
+
+          if (horizontal > 295) {
+            horizontal = 550;
+            speedHorizontal = -5;
+          } else {
+            horizontal = 40;
+            speedHorizontal = 5;
+          }
+
+          pong.ball = [horizontal, vertical];
+          pong.speed = [speedHorizontal, speedVertical];
+          pong.paused = 0;
+        },
+        init: function() {
+          this.paintBoard();
+        }
+      };
+
+      pong.init();
+
+      gameControl.on('connect', gamepad => {
+        if (gamepad.id < 2) {
+          gamepad.on('up', function() {
+            pong.movePaddle(gamepad.id, -1);
+          });
+          gamepad.on('down', function() {
+            pong.movePaddle(gamepad.id, 1);
+          });
+          gamepad.on('start', pong.restart);
+        }
+      });
+    </script>
+  </body>
+</html>
