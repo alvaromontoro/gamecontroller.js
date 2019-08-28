@@ -298,6 +298,38 @@ Not all events will be available in all the gamepads. E.g. if a gamepad only has
       <td>Triggered when button 16 is pressed.</td>
     </tr>
     <tr>
+      <td valign="top"><code>up0</code></td>
+      <td>Triggered when the first axe/joystick is moved up.</td>
+    </tr>
+    <tr>
+      <td valign="top"><code>down0</code></td>
+      <td>Triggered when the first axe/joystick is moved down.</td>
+    </tr>
+    <tr>
+      <td valign="top"><code>right0</code></td>
+      <td>Triggered when the first axe/joystick is moved right.</td>
+    </tr>
+    <tr>
+      <td valign="top"><code>left0</code></td>
+      <td>Triggered when the first axe/joystick is moved left.</td>
+    </tr>
+    <tr>
+      <td valign="top"><code>up1</code></td>
+      <td>Triggered when the second axe/joystick is moved up.</td>
+    </tr>
+    <tr>
+      <td valign="top"><code>down1</code></td>
+      <td>Triggered when the second axe/joystick is moved down.</td>
+    </tr>
+    <tr>
+      <td valign="top"><code>right1</code></td>
+      <td>Triggered when the second axe/joystick is moved right.</td>
+    </tr>
+    <tr>
+      <td valign="top"><code>left1</code></td>
+      <td>Triggered when the second axe/joystick is moved left.</td>
+    </tr>
+    <tr>
       <td valign="top"><code>start</code></td>
       <td>Triggered when Start button is pressed.<br>This is an alias for event <code>button9</code>.</td>
     </tr>
@@ -325,10 +357,28 @@ Not all events will be available in all the gamepads. E.g. if a gamepad only has
       <td valign="top"><code>r2</code></td>
       <td>Triggered when right back button 2 is pressed.<br>This is an alias for event <code>button7</code>.</td>
     </tr>
+    <tr>
+      <td valign="top"><code>up</code></td>
+      <td>Triggered when the main/first axe/joystick is moved up.<br>This is an alias for event <code>up0</code>.</td>
+    </tr>
+    <tr>
+      <td valign="top"><code>down</code></td>
+      <td>Triggered when the main/first axe/joystick is moved down.<br>This is an alias for event <code>down0</code>.</td>
+    </tr>
+    <tr>
+      <td valign="top"><code>right</code></td>
+      <td>Triggered when the main/first axe/joystick is moved right.<br>This is an alias for event <code>right0</code>.</td>
+    </tr>
+    <tr>
+      <td valign="top"><code>left</code></td>
+      <td>Triggered when the main/first axe/joystick is moved left.<br>This is an alias for event <code>left0</code>.</td>
+    </tr>
   </tbody>
 </table>
 
 These names are not arbitrary. They match the buttons and axes described in the [W3C Gamepad API specicification](https://w3c.github.io/gamepad/#fig-visual-representation-of-a-standard-gamepad-layout):
+
+![https://github.com/alvaromontoro/gamecontroller.js/blob/master/public/gamepad.svg](https://github.com/alvaromontoro/gamecontroller.js/blob/master/public/gamepad.svg)
 
 
 -----------
