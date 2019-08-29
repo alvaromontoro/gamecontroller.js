@@ -172,12 +172,12 @@ gamepad.on('up', function() {
     <script>
       gameControl
         .on('connect', function(gp) {
-          for (let x = 0; x < gp.buttons; x++) {
+          for (let x = 0; x < Math.min(17, gp.buttons); x++) {
             gp.on('button' + x, function() {
               document.querySelector('#button-' + x).classList.toggle('active', true);
             });
           }
-          for (let x = 0; x < gp.axes; x++) {
+          for (let x = 0; x < Math.min(2, gp.axes); x++) {
             const directions = ['up', 'down', 'right', 'left'];
             for (let d = 0; d < directions.length; d++) {
               gp.on(directions[d] + x, function() {
