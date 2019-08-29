@@ -10,31 +10,34 @@ const gamepad = {
       buttonActions: {},
       axesActions: {},
       checkStatus: function() {
+        let gp = {};
         const gps = navigator.getGamepads
           ? navigator.getGamepads()
           : navigator.webkitGetGamepads
           ? navigator.webkitGetGamepads
           : [];
-        const gp = gps[this.id];
-        if (gp.buttons) {
-          for (let x = 0; x < this.buttons; x++) {
-            if (gp.buttons[x].pressed === true) {
-              this.buttonActions[x].action();
+        if (gps.length) {
+          gp = gps[this.id];
+          if (gp.buttons) {
+            for (let x = 0; x < this.buttons; x++) {
+              if (gp.buttons[x].pressed === true) {
+                this.buttonActions[x].action();
+              }
             }
           }
-        }
-        if (gp.axes) {
-          for (let x = 0; x < gp.axes.length; x++) {
-            const val = gp.axes[x].toFixed(4);
-            const axe = Math.floor(x / 2);
-            if (val >= 1.0 && x % 2 === 0) {
-              this.axesActions[axe].right.action();
-            } else if (val <= -1.0 && x % 2 === 0) {
-              this.axesActions[axe].left.action();
-            } else if (val >= 1.0 && x % 2 === 1) {
-              this.axesActions[axe].down.action();
-            } else if (val <= -1.0 && x % 2 === 1) {
-              this.axesActions[axe].up.action();
+          if (gp.axes) {
+            for (let x = 0; x < gp.axes.length; x++) {
+              const val = gp.axes[x].toFixed(4);
+              const axe = Math.floor(x / 2);
+              if (val >= 1.0 && x % 2 === 0) {
+                this.axesActions[axe].right.action();
+              } else if (val <= -1.0 && x % 2 === 0) {
+                this.axesActions[axe].left.action();
+              } else if (val >= 1.0 && x % 2 === 1) {
+                this.axesActions[axe].down.action();
+              } else if (val <= -1.0 && x % 2 === 1) {
+                this.axesActions[axe].up.action();
+              }
             }
           }
         }
