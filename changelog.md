@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.1.2] - 2019-08-29
+
+### Added
+
+- Added default/existence check for gamepad to prevent potential bug
+- Updated existing tests and added new ones for gamepad class
+
 ## [v1.1.1] - 2019-08-27
 
 ### Added
