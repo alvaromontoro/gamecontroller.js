@@ -30,4 +30,11 @@ describe('gamepad', () => {
     });
     expect(gp.buttonActions[0].action()).toEqual(message);
   });
+
+  test('Verify sensitivity threshold', () => {
+    const gp = gamepad.init(gamepads[0]);
+    expect(gp.axeThreshold[0]).toEqual(1.0);
+    gp.set('axeThreshold', [0.3]);
+    expect(gp.axeThreshold[0]).toEqual(0.3);
+  });
 });

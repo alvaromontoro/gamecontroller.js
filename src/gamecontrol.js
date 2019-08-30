@@ -3,6 +3,7 @@ import gamepad from './gamepad';
 
 const gameControl = {
   gamepads: {},
+  axeThreshold: [1.0], // this is an array so it can be expanded without breaking in the future
   isReady: isGamepadSupported(),
   onConnect: function() {},
   onDisconnect: function() {},
@@ -16,6 +17,27 @@ const gameControl = {
       return this.gamepads[id];
     }
     return null;
+  },
+  set: function(property, value) {
+    const properties = ['axeThreshold'];
+    if (properties.indexOf(property) >= 0) {
+      if (property === 'axeThreshold' && (!parseFloat(value) || value < 0.0 || value > 1.0)) {
+        log(`Invalid axeThreshold. The value must be a number between 0.00 and 1.00.`, 'error');
+        return;
+      }
+
+      this[property] = value;
+
+      if (property === 'axeThreshold') {
+        const gps = this.getGamepads();
+        const ids = Object.keys(gps);
+        for (let x = 0; x < ids.length; x++) {
+          gps[ids[x]].set('axeThreshold', this.axeThreshold);
+        }
+      }
+    } else {
+      log(`Invalid property (${property})`, 'error');
+    }
   },
   checkStatus: function() {
     const requestAnimationFrame =
@@ -39,8 +61,9 @@ const gameControl = {
       log('Gamepad detected.');
       if (!window.gamepads) window.gamepads = {};
       if (!window.gamepads[e.gamepad.index]) {
-        const gp = gamepad.init(e.gamepad);
         window.gamepads[e.gamepad.index] = e.gamepad;
+        const gp = gamepad.init(e.gamepad);
+        gp.set('axeThreshold', this.axeThreshold);
         this.gamepads[gp.id] = gp;
         this.onConnect(this.gamepads[gp.id]);
       }
