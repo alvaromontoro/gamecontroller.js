@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>GameControl Example: Joystick Sensitivity Threshold</title>
+    <link rel="stylesheet" href="./examples.css" />
+    <style>
+      .demo {
+        text-align: center;
+      }
+      #joystick {
+        width: 200px;
+        height: 200px;
+        background-color: #ddd;
+        background-image: radial-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.2));
+        border-radius: 50%;
+        display: inline-block;
+        box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.25);
+        position: relative;
+      }
+      #joystick.active {
+        background-color: #0a0;
+      }
+      #threshold-line {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        box-shadow: inset 0 0 0 1px #f0f;
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+      }
+      #dot {
+        position: absolute;
+        top: 100px;
+        left: 100px;
+        -webkit-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        background: #d00;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+      }
+    </style>
+  </head>
+
+  <body>
+    <main>
+      <h1>Example: Joystick Sensitivity Threshold</h1>
+      <p>
+        Adjust the level of sensitivity for the axe/joystick, then move the primary axe (see
+        <a href="./example-3-buttons-and-joysticks.html">diagram of layout</a>), and see when when
+        the action would trigger (the circle will turn green).
+      </p>
+      <div class="demo">
+        <input id="threshold" type="range" min="0" max="1" step="0.01" value="1.00" />
+        <div id="threshold-value">1.00</div>
+        <div id="joystick">
+          <div id="threshold-line"></div>
+          <div id="dot"></div>
+        </div>
+      </div>
+      <h2>How it works</h2>
+      <p>
+        Changing the axe/joystick sensitivity with gameController.js is really simple. Use
+        <code>.set(PROPERTY, VALUE)</code> to change the value of <code>"axeThreshold"</code>
+      </p>
+      <p>
+        The passed value can range from 0 to 1, and it can be set at the <code>gamepad</code> level
+        or at the <code>gameControl</code> level (and all the gamepads will be updated with that
+        value.) Here is an example of how it can be done:
+      </p>
+      <pre class="code"><code>gameControl.on('connect', function(gamepad) {
+
+  // all the existing gamepads will have a threshold of 0.75
+  this.set('axeThreshold', 0.75);
+
+  // the newly detected gamepad will have a threshold of 0.5
+  gamepad.set('axeThreshold', 0.5);
+  
+});</code></pre>
+    </main>
+
+    <script src="../dist/gamecontroller.min.js"></script>
+    <script>
+      document.querySelector('#threshold').addEventListener('input', function() {
+        const val = parseFloat(this.value).toFixed(2);
+        document.querySelector('#threshold-value').textContent = val;
+        const line = document.querySelector('#threshold-line');
+        line.style.width = val * 200 + 'px';
+        line.style.height = val * 200 + 'px';
+
+        gameControl.set('axeThreshold', [val]);
+
+        const gps = gameControl.getGamepads();
+        for (let x = 0; x < Object.keys(gps).length; x++) {
+          gps[x].set('axeThreshold', [val]);
+        }
+      });
+
+      function activateJoystick() {
+        document.querySelector('#joystick').classList.toggle('active', true);
+      }
+
+      const dot = document.querySelector('#dot');
+      gameControl
+        .on('afterCycle', function() {
+          const gp = gameControl.getGamepad(0).axeValues[0];
+          const angle = Math.atan(gp[0] / gp[1]);
+          const varX = gp[0] >= 0 ? 1 : -1;
+          const varY = gp[1] >= 0 ? 1 : -1;
+          const x = varY * varX * gp[0] * 100 * Math.sin(angle) + 100;
+          const y = gp[1] * 100 * Math.cos(angle) + 100;
+          dot.style.top = y + 'px';
+          dot.style.left = x + 'px';
+        })
+        .on('beforeCycle', function() {
+          document.querySelector('#joystick').classList.toggle('active', false);
+        })
+        .on('connect', function(gp) {
+          gp.on('up', activateJoystick)
+            .on('down', activateJoystick)
+            .on('left', activateJoystick)
+            .on('right', activateJoystick);
+        });
+    </script>
+  </body>
+</html>
