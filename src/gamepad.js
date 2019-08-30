@@ -6,9 +6,23 @@ const gamepad = {
       id: gpad.index,
       buttons: gpad.buttons.length,
       axes: Math.floor(gpad.axes.length / 2),
+      axeValues: [],
+      axeThreshold: [1.0],
       mapping: gpad.mapping,
       buttonActions: {},
       axesActions: {},
+      set: function(property, value) {
+        const properties = ['axeThreshold'];
+        if (properties.indexOf(property) >= 0) {
+          if (property === 'axeThreshold' && (!parseFloat(value) || value < 0.0 || value > 1.0)) {
+            log(`Invalid axeThreshold. The value must be a number between 0.00 and 1.00.`, 'error');
+            return;
+          }
+          this[property] = value;
+        } else {
+          log(`Invalid property (${property}).`, 'error');
+        }
+      },
       checkStatus: function() {
         let gp = {};
         const gps = navigator.getGamepads
@@ -29,13 +43,14 @@ const gamepad = {
             for (let x = 0; x < gp.axes.length; x++) {
               const val = gp.axes[x].toFixed(4);
               const axe = Math.floor(x / 2);
-              if (val >= 1.0 && x % 2 === 0) {
+              this.axeValues[axe][x % 2] = val;
+              if (val >= this.axeThreshold[0] && x % 2 === 0) {
                 this.axesActions[axe].right.action();
-              } else if (val <= -1.0 && x % 2 === 0) {
+              } else if (val <= -this.axeThreshold[0] && x % 2 === 0) {
                 this.axesActions[axe].left.action();
-              } else if (val >= 1.0 && x % 2 === 1) {
+              } else if (val >= this.axeThreshold[0] && x % 2 === 1) {
                 this.axesActions[axe].down.action();
-              } else if (val <= -1.0 && x % 2 === 1) {
+              } else if (val <= -this.axeThreshold[0] && x % 2 === 1) {
                 this.axesActions[axe].up.action();
               }
             }
@@ -139,6 +154,7 @@ const gamepad = {
         right: { action: function() {} },
         up: { action: function() {} }
       };
+      gamepadPrototype.axeValues[x] = [0, 0];
     }
 
     return gamepadPrototype;
