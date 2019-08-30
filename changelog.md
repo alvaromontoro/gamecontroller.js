@@ -2,11 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.2.0] - 2019-08-30
+
+### Added
+
+- Readable axe/joystick value properties (axeValues)
+- Ability to set the axe/joystick sensitivity threshold (axeThreshold)
+- Tests for new functionality
+- New demo page with example for axe/joystick threshold
+
 ## [v1.1.2] - 2019-08-29
 
 ### Added
 
-- Added default/existence check for gamepad to prevent potential bug
+- Default value/existence check for gamepad to prevent potential bug
 - Updated existing tests and added new ones for gamepad class
 
 ## [v1.1.1] - 2019-08-27
