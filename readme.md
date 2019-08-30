@@ -46,7 +46,7 @@ gameControl.on('connect', function(gamepad) {
 });
 ```
 
-[Visit the Wiki](https://github.com/alvaromontoro/gamecontroller.js/wiki) for a full list of the properties, methods and associated events of these two objects.
+[Visit the Wiki for a full list of the properties, methods and events](https://github.com/alvaromontoro/gamecontroller.js/wiki) of these two objects.
 
 
 ## Browser Support
