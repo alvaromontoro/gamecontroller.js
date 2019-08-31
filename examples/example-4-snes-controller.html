@@ -160,7 +160,7 @@
           gamepad.on('button2', () => document.querySelector('#button-y').classList.add('active'));
           gamepad.on('button3', () => document.querySelector('#button-x').classList.add('active'));
         })
-        .on('beforeCycle', () => {
+        .on('beforecycle', () => {
           document.querySelectorAll('.active').forEach(e => e.classList.remove('active'));
         });
     </script>

@@ -64,7 +64,7 @@
       <h2>How it works</h2>
       <p>
         Changing the axe/joystick sensitivity with gameController.js is really simple. Use
-        <code>.set(PROPERTY, VALUE)</code> to change the value of <code>"axeThreshold"</code>
+        <code>.set(PROPERTY, VALUE)</code> to change the value of <code>"threshold"</code>
       </p>
       <p>
         The passed value can range from 0 to 1, and it can be set at the <code>gamepad</code> level
@@ -74,10 +74,10 @@
       <pre class="code"><code>gameControl.on('connect', function(gamepad) {
 
   // all the existing gamepads will have a threshold of 0.75
-  this.set('axeThreshold', 0.75);
+  this.set('threshold', 0.75);
 
   // the newly detected gamepad will have a threshold of 0.5
-  gamepad.set('axeThreshold', 0.5);
+  gamepad.set('threshold', 0.5);
   
 });</code></pre>
     </main>
@@ -91,11 +91,11 @@
         line.style.width = val * 200 + 'px';
         line.style.height = val * 200 + 'px';
 
-        gameControl.set('axeThreshold', [val]);
+        gameControl.set('threshold', [val]);
 
         const gps = gameControl.getGamepads();
         for (let x = 0; x < Object.keys(gps).length; x++) {
-          gps[x].set('axeThreshold', [val]);
+          gps[x].set('threshold', [val]);
         }
       });
 
@@ -105,7 +105,7 @@
 
       const dot = document.querySelector('#dot');
       gameControl
-        .on('afterCycle', function() {
+        .on('aftercycle', function() {
           const gp = gameControl.getGamepad(0).axeValues[0];
           const angle = Math.atan(gp[0] / gp[1]);
           const varX = gp[0] >= 0 ? 1 : -1;
@@ -115,7 +115,7 @@
           dot.style.top = y + 'px';
           dot.style.left = x + 'px';
         })
-        .on('beforeCycle', function() {
+        .on('beforecycle', function() {
           document.querySelector('#joystick').classList.toggle('active', false);
         })
         .on('connect', function(gp) {

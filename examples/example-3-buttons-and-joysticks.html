@@ -188,7 +188,7 @@ gamepad.on('up', function() {
             }
           }
         })
-        .on('beforeCycle', function() {
+        .on('beforecycle', function() {
           const active = document.querySelectorAll('.active');
           for (let x = 0; x < active.length; x++) {
             active[x].classList.toggle('active', false);

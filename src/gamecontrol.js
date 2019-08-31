@@ -1,14 +1,16 @@
-import { log, isGamepadSupported } from './tools';
+import { log, error, isGamepadSupported } from './tools';
+import { MESSAGE } from './constants';
 import gamepad from './gamepad';
 
 const gameControl = {
   gamepads: {},
-  axeThreshold: [1.0], // this is an array so it can be expanded without breaking in the future
+  threshold: [1.0], // this is an array so it can be expanded without breaking in the future
   isReady: isGamepadSupported(),
-  onConnect: function() {},
-  onDisconnect: function() {},
-  onBeforeCycle: function() {},
-  onAfterCycle: function() {},
+  events: ['connect', 'disconnect', 'beforecycle', 'aftercycle'],
+  connect: function() {},
+  disconnect: function() {},
+  beforecycle: function() {},
+  aftercycle: function() {},
   getGamepads: function() {
     return this.gamepads;
   },
@@ -19,24 +21,24 @@ const gameControl = {
     return null;
   },
   set: function(property, value) {
-    const properties = ['axeThreshold'];
-    if (properties.indexOf(property) >= 0) {
-      if (property === 'axeThreshold' && (!parseFloat(value) || value < 0.0 || value > 1.0)) {
-        log(`Invalid axeThreshold. The value must be a number between 0.00 and 1.00.`, 'error');
+    const properties = ['threshold'];
+    if (['threshold'].indexOf(property) >= 0) {
+      if (property === 'threshold' && (!parseFloat(value) || value < 0.0 || value > 1.0)) {
+        error(MESSAGE.INVALID_THRESHOLD);
         return;
       }
 
       this[property] = value;
 
-      if (property === 'axeThreshold') {
+      if (property === 'threshold') {
         const gps = this.getGamepads();
         const ids = Object.keys(gps);
         for (let x = 0; x < ids.length; x++) {
-          gps[ids[x]].set('axeThreshold', this.axeThreshold);
+          gps[ids[x]].set('threshold', this.threshold);
         }
       }
     } else {
-      log(`Invalid property (${property})`, 'error');
+      error(MESSAGE.INVALID_PROPERTY);
     }
   },
   checkStatus: function() {
@@ -44,13 +46,13 @@ const gameControl = {
       window.requestAnimationFrame || window.webkitRequestAnimationFrame;
     const gamepadIds = Object.keys(gameControl.gamepads);
 
-    gameControl.onBeforeCycle();
+    gameControl.beforecycle();
 
     for (let x = 0; x < gamepadIds.length; x++) {
       gameControl.gamepads[gamepadIds[x]].checkStatus();
     }
 
-    gameControl.onAfterCycle();
+    gameControl.aftercycle();
 
     if (gamepadIds.length > 0) {
       requestAnimationFrame(gameControl.checkStatus);
@@ -58,65 +60,37 @@ const gameControl = {
   },
   init: function() {
     window.addEventListener('gamepadconnected', e => {
-      log('Gamepad detected.');
+      log(MESSAGE.GAMEPAD_ON);
       if (!window.gamepads) window.gamepads = {};
       if (!window.gamepads[e.gamepad.index]) {
         window.gamepads[e.gamepad.index] = e.gamepad;
         const gp = gamepad.init(e.gamepad);
-        gp.set('axeThreshold', this.axeThreshold);
+        gp.set('threshold', this.threshold);
         this.gamepads[gp.id] = gp;
-        this.onConnect(this.gamepads[gp.id]);
+        this.connect(this.gamepads[gp.id]);
       }
       if (Object.keys(this.gamepads).length === 1) this.checkStatus();
     });
     window.addEventListener('gamepaddisconnected', e => {
-      log('Gamepad disconnected.');
+      log(MESSAGE.GAMEPAD_OFF);
       delete window.gamepads[e.gamepad.index];
       delete this.gamepads[e.gamepad.index];
-      this.onDisconnect(e.gamepad.index);
+      this.disconnect(e.gamepad.index);
     });
   },
   on: function(eventName, callback) {
-    switch (eventName) {
-      case 'connect':
-        this.onConnect = callback;
-        break;
-      case 'disconnect':
-        this.onDisconnect = callback;
-        break;
-      case 'beforeCycle':
-      case 'beforecycle':
-        this.onBeforeCycle = callback;
-        break;
-      case 'afterCycle':
-      case 'aftercycle':
-        this.onAfterCycle = callback;
-        break;
-      default:
-        log('Unknown event name', 'error');
-        break;
+    if (this.events.indexOf(eventName) >= 0) {
+      this[eventName] = callback;
+    } else {
+      error(MESSAGE.INVALID_EVENT);
     }
     return this;
   },
   off: function(eventName) {
-    switch (eventName) {
-      case 'connect':
-        this.onConnect = function() {};
-        break;
-      case 'disconnect':
-        this.onDisconnect = function() {};
-        break;
-      case 'beforeCycle':
-      case 'beforecycle':
-        this.onBeforeCycle = function() {};
-        break;
-      case 'afterCycle':
-      case 'aftercycle':
-        this.onAfterCycle = function() {};
-        break;
-      default:
-        log('Unknown event name', 'error');
-        break;
+    if (this.events.indexOf(eventName) >= 0) {
+      this[eventName] = function() {};
+    } else {
+      error(MESSAGE.INVALID_EVENT);
     }
     return this;
   }
