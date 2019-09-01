@@ -1,4 +1,5 @@
 import { error } from './tools';
+import { MESSAGES } from './constants';
 
 const gamepad = {
   init: function(gpad) {
@@ -18,12 +19,12 @@ const gamepad = {
         const properties = ['axeThreshold'];
         if (properties.indexOf(property) >= 0) {
           if (property === 'axeThreshold' && (!parseFloat(value) || value < 0.0 || value > 1.0)) {
-            error(`Invalid axeThreshold. The value must be a number between 0.00 and 1.00.`);
+            error(MESSAGES.INVALID_VALUE_NUMBER);
             return;
           }
           this[property] = value;
         } else {
-          error(`Invalid property (${property}).`);
+          error(MESSAGES.INVALID_PROPERTY);
         }
       },
       vibrate: function(value = 0.75, duration = 500) {
@@ -83,7 +84,7 @@ const gamepad = {
           if (buttonId >= 0 && buttonId < this.buttons) {
             this.buttonActions[buttonId].action = callback;
           } else {
-            error(`Cannot associate event to button that does not exist (${buttonId}).`);
+            error(MESSAGES.INVALID_BUTTON);
           }
         } else if (eventName === 'start') {
           this.buttonActions[9].action = callback;
@@ -101,7 +102,7 @@ const gamepad = {
           if (this.buttons >= 17) {
             this.buttonActions[16].action = callback;
           } else {
-            error('No power button available on this gamepad.');
+            error(MESSAGES.INVALID_BUTTON);
           }
         } else if (eventName.match(/^(up|down|left|right)(\d+)$/)) {
           const matches = eventName.match(/^(up|down|left|right)(\d+)$/);
@@ -110,7 +111,7 @@ const gamepad = {
           if (axe >= 0 && axe < this.axes) {
             this.axesActions[axe][direction].action = callback;
           } else {
-            error(`Cannot associate '${direction}' to axe that does not exist (${axe}).`);
+            error(MESSAGES.INVALID_BUTTON);
           }
         } else if (eventName.match(/^(up|down|left|right)$/)) {
           const direction = eventName.match(/^(up|down|left|right)$/)[1];
@@ -125,7 +126,7 @@ const gamepad = {
           if (buttonId >= 0 && buttonId < this.buttons) {
             this.buttonActions[buttonId].action = function() {};
           } else {
-            error(`Cannot deassociate event to button that does not exist (${buttonId})`);
+            error(MESSAGES.INVALID_BUTTON);
           }
         } else if (eventName === 'start') {
           this.buttonActions[9].action = function() {};
@@ -143,7 +144,7 @@ const gamepad = {
           if (this.buttons >= 17) {
             this.buttonActions[16].action = function() {};
           } else {
-            error('No power button available on this gamepad.');
+            error(MESSAGES.INVALID_BUTTON);
           }
         } else if (eventName.match(/^(up|down|left|right)(\d+)$/)) {
           const matches = eventName.match(/^(up|down|left|right)(\d+)$/);
@@ -152,7 +153,7 @@ const gamepad = {
           if (axe >= 0 && axe < this.axes) {
             this.axesActions[axe][direction].action = function() {};
           } else {
-            error(`Cannot deassociate '${direction}' to axe that does not exist (${axe}).`);
+            error(MESSAGES.INVALID_BUTTON);
           }
         } else if (eventName.match(/^(up|down|left|right)$/)) {
           const direction = eventName.match(/^(up|down|left|right)$/)[1];
