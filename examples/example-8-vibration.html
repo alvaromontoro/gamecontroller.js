@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>GameControl Example: Vibration</title>
+    <link rel="stylesheet" href="./examples.css" />
+    <style>
+      #vibration-button {
+        background: green;
+        color: white;
+        display: block;
+        margin: auto auto;
+        min-height: 60px;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        border-radius: 3px;
+        cursor: pointer;
+        font-size: 1rem;
+      }
+
+      #vibration-button:disabled {
+        background: #ddd;
+        color: #555;
+        cursor: auto;
+      }
+    </style>
+  </head>
+
+  <body>
+    <main>
+      <h1>Example: Vibration</h1>
+      <p class="note">
+        <strong
+          >This is an experimental feature. Not all gamepad/joysticks will support vibration on a
+          browser.</strong
+        >
+        Even the ones that can vibrate, may not be able to vibrate on a browser because this is a
+        not widely supported feature.
+      </p>
+      <p>Connect your gamepad/joystick, and click on the button to trigger the vibration.</p>
+      <p>
+        <button id="vibration-button" disabled>No gamepad/joystick connected</button>
+      </p>
+      <h2>How it works</h2>
+      <p>
+        Vibration of the gamepad can be triggered using the <code>.vibrate()</code> method of the
+        <code>gamepad</code> object. That method takes two parameters:
+      </p>
+      <ul>
+        <li><code>Intensity</code>: the strength of the vibration. It is value between 0 and 1.</li>
+        <li><code>Duration</code>: the duration in milliseconds of the vibration.</li>
+      </ul>
+      <p>
+        The <code>.vibrate()</code> method can be called without parameters. In that case, the
+        intensity will be 0.75 by default, and the duration will be 500 milliseconds (half a
+        second.)
+      </p>
+      <pre class="code"><code>gameControl.on('connect', function(gamepad) {
+
+  if (gamepad.vibration) {
+    gamepad.vibrate(0.5, 1000);
+  }
+  
+});</code></pre>
+      <p>
+        If several vibrations are called, they won't be chained. Instead the last one will overwrite
+        the existing one.
+      </p>
+    </main>
+
+    <script src="../dist/gamecontroller.min.js"></script>
+    <script>
+      document.querySelector('#vibration-button').addEventListener('click', function() {
+        gameControl.getGamepad(0).vibrate(1.0, 1000);
+      });
+
+      gameControl.on('connect', function(gp) {
+        const button = document.querySelector('#vibration-button');
+        if (gp.vibration) {
+          button.textContent = 'Click to trigger vibration.';
+          button.removeAttribute('disabled');
+        } else {
+          button.textContent = 'Sorry, this gamepad does not support vibration.';
+        }
+      });
+    </script>
+  </body>
+</html>
