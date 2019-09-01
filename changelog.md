@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.2.1] - 2019-08-31
+
+### Added
+
+- Bug fix for Firefox (additional unexisting axe detected)
+
 ## [v1.2.0] - 2019-08-30
 
 ### Added
