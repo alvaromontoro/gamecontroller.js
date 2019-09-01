@@ -1,4 +1,4 @@
-import { error } from './tools';
+import { error, emptyEvents } from './tools';
 import { MESSAGES } from './constants';
 
 const gamepad = {
@@ -78,29 +78,29 @@ const gamepad = {
           }
         }
       },
-      on: function(eventName, callback) {
+      associateEvent: function(eventName, callback, type) {
         if (eventName.match(/^button\d+$/)) {
           const buttonId = parseInt(eventName.match(/^button(\d+)$/)[1]);
           if (buttonId >= 0 && buttonId < this.buttons) {
-            this.buttonActions[buttonId].action = callback;
+            this.buttonActions[buttonId][type] = callback;
           } else {
             error(MESSAGES.INVALID_BUTTON);
           }
         } else if (eventName === 'start') {
-          this.buttonActions[9].action = callback;
+          this.buttonActions[9][type] = callback;
         } else if (eventName === 'select') {
-          this.buttonActions[8].action = callback;
+          this.buttonActions[8][type] = callback;
         } else if (eventName === 'r1') {
-          this.buttonActions[5].action = callback;
+          this.buttonActions[5][type] = callback;
         } else if (eventName === 'r2') {
-          this.buttonActions[7].action = callback;
+          this.buttonActions[7][type] = callback;
         } else if (eventName === 'l1') {
-          this.buttonActions[4].action = callback;
+          this.buttonActions[4][type] = callback;
         } else if (eventName === 'l2') {
-          this.buttonActions[6].action = callback;
+          this.buttonActions[6][type] = callback;
         } else if (eventName === 'power') {
           if (this.buttons >= 17) {
-            this.buttonActions[16].action = callback;
+            this.buttonActions[16][type] = callback;
           } else {
             error(MESSAGES.INVALID_BUTTON);
           }
@@ -109,71 +109,34 @@ const gamepad = {
           const direction = matches[1];
           const axe = parseInt(matches[2]);
           if (axe >= 0 && axe < this.axes) {
-            this.axesActions[axe][direction].action = callback;
+            this.axesActions[axe][direction][type] = callback;
           } else {
             error(MESSAGES.INVALID_BUTTON);
           }
         } else if (eventName.match(/^(up|down|left|right)$/)) {
           const direction = eventName.match(/^(up|down|left|right)$/)[1];
-          this.axesActions[0][direction].action = callback;
+          this.axesActions[0][direction][type] = callback;
         }
-
+      },
+      on: function(eventName, callback) {
+        this.associateEvent(eventName, callback, 'action');
         return this;
       },
       off: function(eventName) {
-        if (eventName.match(/^button\d+$/)) {
-          const buttonId = parseInt(eventName.match(/^button(\d+)$/)[1]);
-          if (buttonId >= 0 && buttonId < this.buttons) {
-            this.buttonActions[buttonId].action = function() {};
-          } else {
-            error(MESSAGES.INVALID_BUTTON);
-          }
-        } else if (eventName === 'start') {
-          this.buttonActions[9].action = function() {};
-        } else if (eventName === 'select') {
-          this.buttonActions[8].action = function() {};
-        } else if (eventName === 'r1') {
-          this.buttonActions[5].action = function() {};
-        } else if (eventName === 'r2') {
-          this.buttonActions[7].action = function() {};
-        } else if (eventName === 'l1') {
-          this.buttonActions[4].action = function() {};
-        } else if (eventName === 'l2') {
-          this.buttonActions[6].action = function() {};
-        } else if (eventName === 'power') {
-          if (this.buttons >= 17) {
-            this.buttonActions[16].action = function() {};
-          } else {
-            error(MESSAGES.INVALID_BUTTON);
-          }
-        } else if (eventName.match(/^(up|down|left|right)(\d+)$/)) {
-          const matches = eventName.match(/^(up|down|left|right)(\d+)$/);
-          const direction = matches[1];
-          const axe = parseInt(matches[2]);
-          if (axe >= 0 && axe < this.axes) {
-            this.axesActions[axe][direction].action = function() {};
-          } else {
-            error(MESSAGES.INVALID_BUTTON);
-          }
-        } else if (eventName.match(/^(up|down|left|right)$/)) {
-          const direction = eventName.match(/^(up|down|left|right)$/)[1];
-          this.axesActions[0][direction].action = function() {};
-        }
+        this.associateEvent(eventName, function() {}, 'action');
         return this;
       }
     };
 
     for (let x = 0; x < gamepadPrototype.buttons; x++) {
-      gamepadPrototype.buttonActions[x] = {
-        action: function() {}
-      };
+      gamepadPrototype.buttonActions[x] = emptyEvents();
     }
     for (let x = 0; x < gamepadPrototype.axes; x++) {
       gamepadPrototype.axesActions[x] = {
-        down: { action: function() {} },
-        left: { action: function() {} },
-        right: { action: function() {} },
-        up: { action: function() {} }
+        down: emptyEvents(),
+        left: emptyEvents(),
+        right: emptyEvents(),
+        up: emptyEvents()
       };
       gamepadPrototype.axeValues[x] = [0, 0];
     }
