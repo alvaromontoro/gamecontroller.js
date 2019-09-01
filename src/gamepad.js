@@ -8,6 +8,9 @@ const gamepad = {
       axes: Math.floor(gpad.axes.length / 2),
       axeValues: [],
       axeThreshold: [1.0],
+      hapticActuator: null,
+      vibrationMode: -1,
+      vibration: false,
       mapping: gpad.mapping,
       buttonActions: {},
       axesActions: {},
@@ -21,6 +24,22 @@ const gamepad = {
           this[property] = value;
         } else {
           log(`Invalid property (${property}).`, 'error');
+        }
+      },
+      vibrate: function(value = 0.75, duration = 500) {
+        if (this.hapticActuator) {
+          switch (this.vibrationMode) {
+            case 0:
+              this.hapticActuator.pulse(value, duration);
+              break;
+            case 1:
+              this.hapticActuator.playEffect('dual-rumble', {
+                duration: duration,
+                strongMagnitude: value,
+                weakMagnitude: value
+              });
+              break;
+          }
         }
       },
       checkStatus: function() {
@@ -156,6 +175,27 @@ const gamepad = {
         up: { action: function() {} }
       };
       gamepadPrototype.axeValues[x] = [0, 0];
+    }
+
+    // check if vibration actuator exists
+    if (gpad.hapticActuators) {
+      // newer standard
+      if (typeof gpad.hapticActuators.pulse === 'function') {
+        this.hapticActuator = gpad.hapticActuators;
+        this.vibrationMode = 0;
+        this.vibration = true;
+      } else if (gpad.hapticActuators[0] && typeof gpad.hapticActuators[0].pulse === 'function') {
+        this.hapticActuator = gpad.hapticActuators[0];
+        this.vibrationMode = 0;
+        this.vibration = true;
+      }
+    } else if (gamepad.vibrationActuator) {
+      // old chrome stuff
+      if (typeof gamepad.vibrationActuator.playEffect === 'function') {
+        this.hapticActuator = gamepad.vibrationActuator.playEffect;
+        this.vibrationMode = 1;
+        this.vibration = true;
+      }
     }
 
     return gamepadPrototype;
