@@ -1,4 +1,4 @@
-import { log, isGamepadSupported } from './tools';
+import { log, error, isGamepadSupported } from './tools';
 import gamepad from './gamepad';
 
 const gameControl = {
@@ -22,7 +22,7 @@ const gameControl = {
     const properties = ['axeThreshold'];
     if (properties.indexOf(property) >= 0) {
       if (property === 'axeThreshold' && (!parseFloat(value) || value < 0.0 || value > 1.0)) {
-        log(`Invalid axeThreshold. The value must be a number between 0.00 and 1.00.`, 'error');
+        error(`Invalid axeThreshold. The value must be a number between 0.00 and 1.00.`);
         return;
       }
 
@@ -36,7 +36,7 @@ const gameControl = {
         }
       }
     } else {
-      log(`Invalid property (${property})`, 'error');
+      error(`Invalid property (${property})`);
     }
   },
   checkStatus: function() {
@@ -93,7 +93,7 @@ const gameControl = {
         this.onAfterCycle = callback;
         break;
       default:
-        log('Unknown event name', 'error');
+        error('Unknown event name');
         break;
     }
     return this;
@@ -115,7 +115,7 @@ const gameControl = {
         this.onAfterCycle = function() {};
         break;
       default:
-        log('Unknown event name', 'error');
+        error('Unknown event name');
         break;
     }
     return this;
