@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.3.0] - 2019-08-31
+
+### Added
+
+- New vibration capability (experimental feature)
+- New demo page with example for axe/joystick threshold
+
 ## [v1.2.1] - 2019-08-31
 
 ### Added
