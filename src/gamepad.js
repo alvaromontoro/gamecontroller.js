@@ -40,8 +40,9 @@ const gamepad = {
             }
           }
           if (gp.axes) {
-            for (let x = 0; x < gp.axes.length; x++) {
-              const val = gp.axes[x].toFixed(4);
+            const modifier = gp.axes.length % 2; // Firefox hack: detects one additional axe
+            for (let x = 0; x < this.axes * 2; x++) {
+              const val = gp.axes[x + modifier].toFixed(4);
               const axe = Math.floor(x / 2);
               this.axeValues[axe][x % 2] = val;
               if (val >= this.axeThreshold[0] && x % 2 === 0) {
