@@ -30,11 +30,11 @@ const gamepads = [
     }
   },
   {
-    axes: [0, 0],
+    axes: [1.0, 1.0],
     buttons: [
+      { pressed: true, touched: false, value: 0 },
       { pressed: false, touched: false, value: 0 },
-      { pressed: false, touched: false, value: 0 },
-      { pressed: false, touched: false, value: 0 },
+      { pressed: true, touched: false, value: 0 },
       { pressed: false, touched: false, value: 0 },
       { pressed: false, touched: false, value: 0 },
       { pressed: false, touched: false, value: 0 },
@@ -103,6 +103,32 @@ const gamepadsFirefox = [
     mapping: '',
     timestamp: 5200,
     hapticActuators: null
+  },
+  {
+    axes: [0, 0, 0],
+    buttons: [
+      { pressed: false, touched: false, value: 0 },
+      { pressed: false, touched: false, value: 0 },
+      { pressed: false, touched: false, value: 0 },
+      { pressed: false, touched: false, value: 0 },
+      { pressed: false, touched: false, value: 0 },
+      { pressed: false, touched: false, value: 0 },
+      { pressed: false, touched: false, value: 0 },
+      { pressed: false, touched: false, value: 0 },
+      { pressed: false, touched: false, value: 0 },
+      { pressed: false, touched: false, value: 0 }
+    ],
+    connected: true,
+    id: '10-button gamepad mockup (Vendor: Alvaro Product: Montoro10)',
+    index: 1,
+    mapping: '',
+    timestamp: 5200,
+    hapticActuators: [
+      {
+        pulse: (intensity, duration) => `vibrate at ${intensity} for ${duration}ms`
+      },
+      null
+    ]
   }
 ];
 
