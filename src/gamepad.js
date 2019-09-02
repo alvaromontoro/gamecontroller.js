@@ -61,7 +61,7 @@ const gamepad = {
         const gps = navigator.getGamepads
           ? navigator.getGamepads()
           : navigator.webkitGetGamepads
-          ? navigator.webkitGetGamepads
+          ? navigator.webkitGetGamepads()
           : [];
         if (gps.length) {
           gp = gps[this.id];
