@@ -10,7 +10,7 @@ All notable changes to this project will be documented in this file.
 - Before event for buttons and axe/joysticks
 - Refactor code to make library 20% smaller
 
-## [v1.3.0] - 2019-08-31
+## [v1.3.0] - 2019-09-01
 
 ### Added
 
