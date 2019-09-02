@@ -12,6 +12,6 @@ const isGamepadSupported = () =>
   (navigator.getGamepads && typeof navigator.getGamepads === 'function') ||
   (navigator.getGamepads && typeof navigator.webkitGetGamepads === 'function');
 
-const emptyEvents = () => ({ action: () => {} });
+const emptyEvents = () => ({ action: () => {}, after: () => {} });
 
 export { isGamepadSupported, log, error, emptyEvents };

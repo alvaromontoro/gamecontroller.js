@@ -15,6 +15,7 @@ const gamepad = {
       mapping: gpad.mapping,
       buttonActions: {},
       axesActions: {},
+      pressed: {},
       set: function(property, value) {
         const properties = ['axeThreshold'];
         if (properties.indexOf(property) >= 0) {
@@ -43,6 +44,15 @@ const gamepad = {
           }
         }
       },
+      triggerDirectionalAction: function(id, axe, condition, x, index) {
+        if (condition && x % 2 === index) {
+          this.axesActions[axe][id].action();
+          this.pressed[`${id}${axe}`] = true;
+        } else if (this.pressed[`${id}${axe}`] && x % 2 === index) {
+          delete this.pressed[`${id}${axe}`];
+          this.axesActions[axe][id].after();
+        }
+      },
       checkStatus: function() {
         let gp = {};
         const gps = navigator.getGamepads
@@ -56,6 +66,10 @@ const gamepad = {
             for (let x = 0; x < this.buttons; x++) {
               if (gp.buttons[x].pressed === true) {
                 this.buttonActions[x].action();
+                this.pressed[`button${x}`] = true;
+              } else if (this.pressed[`button${x}`]) {
+                delete this.pressed[`button${x}`];
+                this.buttonActions[x].after();
               }
             }
           }
@@ -65,15 +79,11 @@ const gamepad = {
               const val = gp.axes[x + modifier].toFixed(4);
               const axe = Math.floor(x / 2);
               this.axeValues[axe][x % 2] = val;
-              if (val >= this.axeThreshold[0] && x % 2 === 0) {
-                this.axesActions[axe].right.action();
-              } else if (val <= -this.axeThreshold[0] && x % 2 === 0) {
-                this.axesActions[axe].left.action();
-              } else if (val >= this.axeThreshold[0] && x % 2 === 1) {
-                this.axesActions[axe].down.action();
-              } else if (val <= -this.axeThreshold[0] && x % 2 === 1) {
-                this.axesActions[axe].up.action();
-              }
+
+              this.triggerDirectionalAction('right', axe, val >= this.axeThreshold[0], x, 0);
+              this.triggerDirectionalAction('left', axe, val <= -this.axeThreshold[0], x, 0);
+              this.triggerDirectionalAction('down', axe, val >= this.axeThreshold[0], x, 1);
+              this.triggerDirectionalAction('up', axe, val <= -this.axeThreshold[0], x, 1);
             }
           }
         }
@@ -117,14 +127,16 @@ const gamepad = {
           const direction = eventName.match(/^(up|down|left|right)$/)[1];
           this.axesActions[0][direction][type] = callback;
         }
+        return this;
       },
       on: function(eventName, callback) {
-        this.associateEvent(eventName, callback, 'action');
-        return this;
+        return this.associateEvent(eventName, callback, 'action');
       },
       off: function(eventName) {
-        this.associateEvent(eventName, function() {}, 'action');
-        return this;
+        return this.associateEvent(eventName, function() {}, 'action');
+      },
+      after: function(eventName, callback) {
+        return this.associateEvent(eventName, callback, 'after');
       }
     };
 
