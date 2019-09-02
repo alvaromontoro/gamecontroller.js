@@ -1,4 +1,5 @@
-import { log, isGamepadSupported } from './tools';
+import { log, error, isGamepadSupported } from './tools';
+import { MESSAGES } from './constants';
 import gamepad from './gamepad';
 
 const gameControl = {
@@ -22,7 +23,7 @@ const gameControl = {
     const properties = ['axeThreshold'];
     if (properties.indexOf(property) >= 0) {
       if (property === 'axeThreshold' && (!parseFloat(value) || value < 0.0 || value > 1.0)) {
-        log(`Invalid axeThreshold. The value must be a number between 0.00 and 1.00.`, 'error');
+        error(MESSAGES.INVALID_VALUE_NUMBER);
         return;
       }
 
@@ -36,7 +37,7 @@ const gameControl = {
         }
       }
     } else {
-      log(`Invalid property (${property})`, 'error');
+      error(MESSAGES.INVALID_PROPERTY);
     }
   },
   checkStatus: function() {
@@ -58,7 +59,7 @@ const gameControl = {
   },
   init: function() {
     window.addEventListener('gamepadconnected', e => {
-      log('Gamepad detected.');
+      log(MESSAGES.ON);
       if (!window.gamepads) window.gamepads = {};
       if (!window.gamepads[e.gamepad.index]) {
         window.gamepads[e.gamepad.index] = e.gamepad;
@@ -70,7 +71,7 @@ const gameControl = {
       if (Object.keys(this.gamepads).length === 1) this.checkStatus();
     });
     window.addEventListener('gamepaddisconnected', e => {
-      log('Gamepad disconnected.');
+      log(MESSAGES.OFF);
       delete window.gamepads[e.gamepad.index];
       delete this.gamepads[e.gamepad.index];
       this.onDisconnect(e.gamepad.index);
@@ -93,7 +94,7 @@ const gameControl = {
         this.onAfterCycle = callback;
         break;
       default:
-        log('Unknown event name', 'error');
+        error(MESSAGES.UNKNOWN_EVENT);
         break;
     }
     return this;
@@ -115,7 +116,7 @@ const gameControl = {
         this.onAfterCycle = function() {};
         break;
       default:
-        log('Unknown event name', 'error');
+        error(MESSAGES.UNKNOWN_EVENT);
         break;
     }
     return this;
