@@ -1,5 +1,5 @@
 import gamepad from '../src/gamepad';
-import gamepads from './mock.gamepads';
+import { gamepads, gamepadsFirefox } from './mock.gamepads';
 
 describe('gamepad', () => {
   test('Check default values (17-button gamepad)', () => {
@@ -36,5 +36,10 @@ describe('gamepad', () => {
     expect(gp.axeThreshold[0]).toEqual(1.0);
     gp.set('axeThreshold', [0.3]);
     expect(gp.axeThreshold[0]).toEqual(0.3);
+  });
+
+  test('Vibration', () => {
+    const gp = gamepad.init(gamepads[0]);
+    expect(gp.vibrate(0.5, 500)).toEqual('dual-rumble - 500');
   });
 });
