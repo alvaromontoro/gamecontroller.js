@@ -33,14 +33,12 @@ const gamepad = {
           switch (this.vibrationMode) {
             case 0:
               return this.hapticActuator.pulse(value, duration);
-              break;
             case 1:
               return this.hapticActuator.playEffect('dual-rumble', {
                 duration: duration,
                 strongMagnitude: value,
                 weakMagnitude: value
               });
-              break;
           }
         }
       },
@@ -63,6 +61,7 @@ const gamepad = {
           : navigator.webkitGetGamepads
           ? navigator.webkitGetGamepads()
           : [];
+
         if (gps.length) {
           gp = gps[this.id];
           if (gp.buttons) {
