@@ -46,8 +46,11 @@ const gamepad = {
       },
       triggerDirectionalAction: function(id, axe, condition, x, index) {
         if (condition && x % 2 === index) {
+          if (!this.pressed[`${id}${axe}`]) {
+            this.pressed[`${id}${axe}`] = true;
+            this.axesActions[axe][id].before();
+          }
           this.axesActions[axe][id].action();
-          this.pressed[`${id}${axe}`] = true;
         } else if (this.pressed[`${id}${axe}`] && x % 2 === index) {
           delete this.pressed[`${id}${axe}`];
           this.axesActions[axe][id].after();
@@ -65,8 +68,11 @@ const gamepad = {
           if (gp.buttons) {
             for (let x = 0; x < this.buttons; x++) {
               if (gp.buttons[x].pressed === true) {
+                if (!this.pressed[`button${x}`]) {
+                  this.pressed[`button${x}`] = true;
+                  this.buttonActions[x].before();
+                }
                 this.buttonActions[x].action();
-                this.pressed[`button${x}`] = true;
               } else if (this.pressed[`button${x}`]) {
                 delete this.pressed[`button${x}`];
                 this.buttonActions[x].after();
@@ -137,6 +143,9 @@ const gamepad = {
       },
       after: function(eventName, callback) {
         return this.associateEvent(eventName, callback, 'after');
+      },
+      before: function(eventName, callback) {
+        return this.associateEvent(eventName, callback, 'before');
       }
     };
 
