@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>GameControl Example: Before and After Events</title>
+    <link rel="stylesheet" href="./examples.css" />
+    <style>
+      #log {
+        height: 300px;
+        overflow: auto;
+        border: 1px solid #ccc;
+      }
+      #demo-content {
+        width: 80%;
+        margin: auto auto;
+      }
+    </style>
+  </head>
+
+  <body>
+    <main>
+      <h1>Example: Before and After Events</h1>
+      <p>
+        Connect a gamepad to the computer, then press the Start and Select buttons and see the
+        numbers update below.
+      </p>
+      <div id="demo-content">
+        <p>
+          <kbd>Select</kbd> pressed: <span id="select">0</span> times.<br />
+          <kbd>Start</kbd> pressed: <span id="start">0</span> times.<br />
+        </p>
+        <p id="log"></p>
+      </div>
+      <p>
+        This is achieved using the <code>.before()</code> and <code>.after()</code> event handlers.
+        And it can be really convenient in many situations: setting up timers, mimic a single press
+        instead of a continuous one, etc.
+      </p>
+      <h2>How it works</h2>
+      <p>
+        The <code>.before()</code> and <code>.after()</code> methods work in a similar way to how
+        <code>.on()</code> does:
+      </p>
+      <pre class="code"><code>gamepad.before(EVENTNAME, CALLBACK);
+gamepad.on(EVENTNAME, CALLBACK);
+gamepad.after(EVENTNAME, CALLBACK);</code></pre>
+      <p>
+        These methods can be chained to allow a more fluid development. So the example above could
+        also be written as:
+      </p>
+      <pre class="code"><code>gamepad.before(EVENTNAME, CALLBACK);
+       .on(EVENTNAME, CALLBACK);
+       .after(EVENTNAME, CALLBACK);</code></pre>
+    </main>
+    <script src="../dist/gamecontroller.min.js"></script>
+    <script>
+      const log = document.querySelector('#log');
+      let start = 0;
+      let select = 0;
+      gameControl.on('connect', function(gp) {
+        gp.on('start', function() {
+          log.insertAdjacentHTML('afterbegin', '<div>Start is on</div>');
+        })
+          .before('start', function() {
+            log.insertAdjacentHTML('afterbegin', '<div>Start is pressed</div>');
+          })
+          .after('start', function() {
+            log.insertAdjacentHTML('afterbegin', '<div>Start was released</div>');
+            start++;
+            document.querySelector('#start').textContent = start;
+          });
+        gp.on('select', function() {
+          log.insertAdjacentHTML('afterbegin', '<div>Select is on</div>');
+        })
+          .before('select', function() {
+            log.insertAdjacentHTML('afterbegin', '<div>Select is pressed</div>');
+          })
+          .after('select', function() {
+            log.insertAdjacentHTML('afterbegin', '<div>Select was released</div>');
+            select++;
+            document.querySelector('#select').textContent = select;
+          });
+      });
+    </script>
+  </body>
+</html>

@@ -10,7 +10,8 @@ const error = message => log(message, 'error');
 
 const isGamepadSupported = () =>
   (navigator.getGamepads && typeof navigator.getGamepads === 'function') ||
-  (navigator.getGamepads && typeof navigator.webkitGetGamepads === 'function');
+  (navigator.getGamepads && typeof navigator.webkitGetGamepads === 'function') ||
+  false;
 
 const emptyEvents = () => ({ action: () => {}, after: () => {}, before: () => {} });
 

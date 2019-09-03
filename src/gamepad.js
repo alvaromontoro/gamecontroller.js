@@ -32,15 +32,13 @@ const gamepad = {
         if (this.hapticActuator) {
           switch (this.vibrationMode) {
             case 0:
-              this.hapticActuator.pulse(value, duration);
-              break;
+              return this.hapticActuator.pulse(value, duration);
             case 1:
-              this.hapticActuator.playEffect('dual-rumble', {
+              return this.hapticActuator.playEffect('dual-rumble', {
                 duration: duration,
                 strongMagnitude: value,
                 weakMagnitude: value
               });
-              break;
           }
         }
       },
@@ -61,8 +59,9 @@ const gamepad = {
         const gps = navigator.getGamepads
           ? navigator.getGamepads()
           : navigator.webkitGetGamepads
-          ? navigator.webkitGetGamepads
+          ? navigator.webkitGetGamepads()
           : [];
+
         if (gps.length) {
           gp = gps[this.id];
           if (gp.buttons) {
@@ -166,20 +165,20 @@ const gamepad = {
     if (gpad.hapticActuators) {
       // newer standard
       if (typeof gpad.hapticActuators.pulse === 'function') {
-        this.hapticActuator = gpad.hapticActuators;
-        this.vibrationMode = 0;
-        this.vibration = true;
+        gamepadPrototype.hapticActuator = gpad.hapticActuators;
+        gamepadPrototype.vibrationMode = 0;
+        gamepadPrototype.vibration = true;
       } else if (gpad.hapticActuators[0] && typeof gpad.hapticActuators[0].pulse === 'function') {
-        this.hapticActuator = gpad.hapticActuators[0];
-        this.vibrationMode = 0;
-        this.vibration = true;
+        gamepadPrototype.hapticActuator = gpad.hapticActuators[0];
+        gamepadPrototype.vibrationMode = 0;
+        gamepadPrototype.vibration = true;
       }
-    } else if (gamepad.vibrationActuator) {
+    } else if (gpad.vibrationActuator) {
       // old chrome stuff
-      if (typeof gamepad.vibrationActuator.playEffect === 'function') {
-        this.hapticActuator = gamepad.vibrationActuator.playEffect;
-        this.vibrationMode = 1;
-        this.vibration = true;
+      if (typeof gpad.vibrationActuator.playEffect === 'function') {
+        gamepadPrototype.hapticActuator = gpad.vibrationActuator;
+        gamepadPrototype.vibrationMode = 1;
+        gamepadPrototype.vibration = true;
       }
     }
 
