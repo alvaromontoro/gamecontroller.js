@@ -49,4 +49,63 @@ describe('gameControl', () => {
     gameControl.axeThreshold = [0.5];
     expect(gp.axeThreshold[0]).toEqual(0.3);
   });
+
+  test('event associattion and deassociation', () => {
+    gameControl
+      .on('connect', () => 'gamepad connected')
+      .on('disconnect', () => 'gamepad disconnected')
+      .on('beforecycle', () => 'before cycle')
+      .on('aftercycle', () => 'after cycle')
+      .on('afterCycle', () => 'after Cycle')
+      .on('beforeCycle', () => 'before Cycle');
+
+    expect(gameControl.onConnect()).toEqual('gamepad connected');
+
+    gameControl
+      .off('connect')
+      .off('disconnect')
+      .off('beforecycle')
+      .off('aftercycle')
+      .off('afterCycle')
+      .off('beforeCycle');
+
+    expect(gameControl.onConnect()).toEqual(undefined);
+  });
+
+  test('event association/deassociation of unknown event', () => {
+    gameControl.on('invalidEvent', () => 'invalid event');
+    gameControl.off('invalidEvent');
+  });
+
+  test('trigger event gamepadconnected', () => {
+    const event = new CustomEvent('gamepadconnected', {
+      detail: { gamepad: gamepads[0] }
+    });
+    global.dispatchEvent(event);
+  });
+
+  test('trigger event gamepaddisconnected', () => {
+    const event = new CustomEvent('gamepaddisconnected', {
+      detail: { gamepad: gamepads[0] }
+    });
+    global.dispatchEvent(event);
+  });
+
+  test('checkStatus', () => {
+    generateGamepads();
+    gameControl.checkStatus();
+  });
+
+  test('set invalid property', () => {
+    gameControl.set('invalidProperty', true);
+  });
+
+  test('set axeThreshold', () => {
+    gameControl.set('axeThreshold', [1.0]);
+    expect(gameControl.axeThreshold[0]).toEqual(1.0);
+    gameControl.set('axeThreshold', [0.5]);
+    expect(gameControl.axeThreshold[0]).toEqual(0.5);
+    gameControl.set('axeThreshold', [10.5]);
+    expect(gameControl.axeThreshold[0]).toEqual(0.5);
+  });
 });
