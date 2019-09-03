@@ -61,20 +61,24 @@ const gameControl = {
     window.addEventListener('gamepadconnected', e => {
       log(MESSAGES.ON);
       if (!window.gamepads) window.gamepads = {};
-      if (!window.gamepads[e.gamepad.index]) {
-        window.gamepads[e.gamepad.index] = e.gamepad;
-        const gp = gamepad.init(e.gamepad);
-        gp.set('axeThreshold', this.axeThreshold);
-        this.gamepads[gp.id] = gp;
-        this.onConnect(this.gamepads[gp.id]);
+      if (e.gamepad) {
+        if (!window.gamepads[e.gamepad.index]) {
+          window.gamepads[e.gamepad.index] = e.gamepad;
+          const gp = gamepad.init(e.gamepad);
+          gp.set('axeThreshold', this.axeThreshold);
+          this.gamepads[gp.id] = gp;
+          this.onConnect(this.gamepads[gp.id]);
+        }
+        if (Object.keys(this.gamepads).length === 1) this.checkStatus();
       }
-      if (Object.keys(this.gamepads).length === 1) this.checkStatus();
     });
     window.addEventListener('gamepaddisconnected', e => {
       log(MESSAGES.OFF);
-      delete window.gamepads[e.gamepad.index];
-      delete this.gamepads[e.gamepad.index];
-      this.onDisconnect(e.gamepad.index);
+      if (e.gamepad) {
+        delete window.gamepads[e.gamepad.index];
+        delete this.gamepads[e.gamepad.index];
+        this.onDisconnect(e.gamepad.index);
+      }
     });
   },
   on: function(eventName, callback) {
