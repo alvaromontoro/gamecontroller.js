@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.4.1] - 2019-09-02
+
+### Added
+
+- Bug fixes
+- Tests to complete 95% statement coverage (missing event)
+
 ## [v1.4.0] - 2019-09-02
 
 ### Added
