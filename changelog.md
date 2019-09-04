@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.4.2] - 2019-09-03
+
+### Added
+
+- Bug fixes
+- Update tests for gamecontrol
+- Update readme file
+
 ## [v1.4.1] - 2019-09-02
 
 ### Added
