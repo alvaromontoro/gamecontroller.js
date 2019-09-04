@@ -106,6 +106,8 @@ gamepad.on('button0',     () => { console.log('Button 0 still pressed...'); })
 
 To see the event flow and how the different events are lined-up and interact with each other, visit the [Event Flow wikipage](../EventFlow).
 
+Thisus
+
 These are the _events_ that can be passed as first parameter to the event functions:
 
 <table>
@@ -262,6 +264,10 @@ These are the _events_ that can be passed as first parameter to the event functi
     </tr>
   </tbody>
 </table>
+
+These names are not arbitrary. They match the buttons and axes described in the [W3C Gamepad API specicification](https://w3c.github.io/gamepad/#fig-visual-representation-of-a-standard-gamepad-layout):
+
+![https://github.com/alvaromontoro/gamecontroller.js/blob/master/public/gamepad.svg](https://github.com/alvaromontoro/gamecontroller.js/blob/master/public/gamepad.svg)
 
 
 ## Browser Support
