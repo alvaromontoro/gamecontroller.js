@@ -31,6 +31,12 @@ describe('gameControl', () => {
     expect(gp.mapping).toEqual('standard');
   });
 
+  test('Function getGamepad(id) incorrect id', () => {
+    generateGamepads();
+    const gp = gameControl.getGamepad(100);
+    expect(gp).toEqual(null);
+  });
+
   test('Verify sensitivity threshold', () => {
     generateGamepads();
     const gp = gameControl.getGamepad(0);
@@ -79,8 +85,12 @@ describe('gameControl', () => {
 
   test('trigger event gamepadconnected', () => {
     const event = new CustomEvent('gamepadconnected', {
-      detail: { gamepad: gamepads[0] }
+      detail: { gamepad: gamepads[0] },
+      gamepad: gamepads[0]
     });
+    if (!event.detail) {
+      event.detail = { gamepad: gamepads[0] };
+    }
     global.dispatchEvent(event);
   });
 

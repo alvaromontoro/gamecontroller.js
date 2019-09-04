@@ -59,12 +59,13 @@ const gameControl = {
   },
   init: function() {
     window.addEventListener('gamepadconnected', e => {
+      const egp = e.gamepad || e.detail.gamepad;
       log(MESSAGES.ON);
       if (!window.gamepads) window.gamepads = {};
-      if (e.gamepad) {
-        if (!window.gamepads[e.gamepad.index]) {
-          window.gamepads[e.gamepad.index] = e.gamepad;
-          const gp = gamepad.init(e.gamepad);
+      if (egp) {
+        if (!window.gamepads[egp.index]) {
+          window.gamepads[egp.index] = egp;
+          const gp = gamepad.init(egp);
           gp.set('axeThreshold', this.axeThreshold);
           this.gamepads[gp.id] = gp;
           this.onConnect(this.gamepads[gp.id]);
@@ -73,11 +74,12 @@ const gameControl = {
       }
     });
     window.addEventListener('gamepaddisconnected', e => {
+      const egp = e.gamepad || e.detail.gamepad;
       log(MESSAGES.OFF);
-      if (e.gamepad) {
-        delete window.gamepads[e.gamepad.index];
-        delete this.gamepads[e.gamepad.index];
-        this.onDisconnect(e.gamepad.index);
+      if (egp) {
+        delete window.gamepads[egp.index];
+        delete this.gamepads[egp.index];
+        this.onDisconnect(egp.index);
       }
     });
   },
