@@ -48,11 +48,29 @@ describe('gamepad', () => {
   test('Vibration in Chrome', () => {
     const gp = gamepad.init(gamepads[0]);
     expect(gp.vibrate(0.5, 500)).toEqual('dual-rumble - 500');
+    expect(gp.vibrate()).toEqual('dual-rumble - 500');
+  });
+
+  // this case should never happen
+  test('Vibration in Chrome (no vibration)', () => {
+    const gp = gamepad.init(gamepads[2]);
+    expect(gp.vibrate(0.5, 500)).toEqual(undefined);
   });
 
   test('Vibration in Firefox', () => {
     const gp = gamepad.init(gamepadsFirefox[0]);
     expect(gp.vibrate(0.5, 500)).toEqual('vibrate at 0.5 for 500ms');
+  });
+
+  test('Vibration in Firefox (no vibration)', () => {
+    const gp = gamepad.init(gamepadsFirefox[1]);
+    expect(gp.vibrate(0.5, 500)).toEqual(undefined);
+  });
+
+  // this case should never happen
+  test('Vibration in Firefox (wrong type)', () => {
+    const gp = gamepad.init(gamepadsFirefox[3]);
+    expect(gp.vibrate(0.5, 500)).toEqual(undefined);
   });
 
   test('Vibration in Firefox (array of actuators)', () => {
@@ -74,6 +92,11 @@ describe('gamepad', () => {
       return 'button0 is on';
     });
     expect(gp.buttonActions[0].action()).toEqual('button0 is on');
+  });
+
+  test('on wrong event', () => {
+    const gp = gamepad.init(gamepads[0]);
+    gp.on('fakeevent', () => {});
   });
 
   test('before event', () => {
@@ -157,6 +180,20 @@ describe('gamepad', () => {
     gp.checkStatus();
     gamepads[1].buttons[0].pressed = false;
     gamepads[1].axes[0] = 0.0;
+    gp.checkStatus();
+  });
+
+  // this should not happen
+  test('cycle check status (no axes)', () => {
+    const gp = gamepad.init(gamepads[2]);
+    gamepads[2].axes = null;
+    gamepads[2].buttons = null;
+    const mockGamepads = () => gamepads;
+    global.navigator.getGamepads = mockGamepads;
+    gp.checkStatus();
+
+    global.navigator.getGamepads = null;
+    global.navigator.webkitGetGamepads = mockGamepads;
     gp.checkStatus();
   });
 });

@@ -49,6 +49,16 @@ const gamepads = [
     mapping: '',
     timestamp: 5200,
     vibrationActuator: null
+  },
+  {
+    axes: [],
+    buttons: [],
+    connected: true,
+    id: 'No-button No-axe gamepad mockup (Vendor: Alvaro Product: Montoro10)',
+    index: 2,
+    mapping: '',
+    timestamp: 5200,
+    vibrationActuator: { playEffect: 'error' }
   }
 ];
 
@@ -120,12 +130,27 @@ const gamepadsFirefox = [
     ],
     connected: true,
     id: '10-button gamepad mockup (Vendor: Alvaro Product: Montoro10)',
-    index: 1,
+    index: 2,
     mapping: '',
     timestamp: 5200,
     hapticActuators: [
       {
         pulse: (intensity, duration) => `vibrate at ${intensity} for ${duration}ms`
+      },
+      null
+    ]
+  },
+  {
+    axes: [0, 0, 0],
+    buttons: [{ pressed: false, touched: false, value: 0 }],
+    connected: true,
+    id: '1-button gamepad mockup (Vendor: Alvaro Product: Montoro10)',
+    index: 3,
+    mapping: '',
+    timestamp: 5200,
+    hapticActuators: [
+      {
+        pulse: 'error'
       },
       null
     ]
