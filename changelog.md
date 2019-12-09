@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.4.4] - 2019-12-08
+
+### Updated
+
+- Add tests
+
 ## [v1.4.3] - 2019-12-08
 
 ### Updated

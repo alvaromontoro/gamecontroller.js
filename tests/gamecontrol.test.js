@@ -12,10 +12,70 @@ function generateGamepads() {
 }
 
 describe('gameControl', () => {
+  // these cases should probably not happen but should fail gracefully
+  test('Check status when nothing has been connected yet', () => {
+    global.webkitRequestAnimationFrame = global.requestAnimationFrame;
+    global.requestAnimationFrame = null;
+    gameControl.checkStatus();
+    global.requestAnimationFrame = global.webkitRequestAnimationFrame;
+  });
+
   test('Check gameControl gamepads', () => {
     expect(gameControl.gamepads).toEqual({});
     expect(gameControl.getGamepads()).toEqual({});
     expect(gameControl.getGamepad(0)).toEqual(null);
+  });
+
+  test('trigger event gamepadconnected', () => {
+    const event = new CustomEvent('gamepadconnected', {
+      detail: { gamepad: gamepads[0] },
+      gamepad: gamepads[0]
+    });
+    global.dispatchEvent(event);
+  });
+
+  test('trigger event gamepaddisconnected', () => {
+    const event = new CustomEvent('gamepaddisconnected', {
+      detail: { gamepad: gamepads[0] }
+    });
+    global.dispatchEvent(event);
+  });
+
+  // this definitely should not happen
+  test('trigger event gamepadconnected (no gamepad)', () => {
+    const event = new CustomEvent('gamepadconnected', {
+      detail: {}
+    });
+    global.dispatchEvent(event);
+  });
+
+  // this should not happen
+  test('trigger event gamepaddisconnected (no gamepad)', () => {
+    const event = new CustomEvent('gamepaddisconnected', {
+      detail: {}
+    });
+    global.dispatchEvent(event);
+  });
+
+  test('trigger event gamepadconnected for three gamepads', () => {
+    const event = new CustomEvent('gamepadconnected', {
+      detail: { gamepad: gamepads[0] },
+      gamepad: gamepads[0]
+    });
+    global.dispatchEvent(event);
+
+    const event2 = new CustomEvent('gamepadconnected', {
+      detail: { gamepad: gamepads[1] },
+      gamepad: gamepads[1]
+    });
+    global.dispatchEvent(event2);
+
+    // this probably shouldn't happen
+    const event3 = new CustomEvent('gamepadconnected', {
+      detail: { gamepad: gamepads[0] },
+      gamepad: gamepads[0]
+    });
+    global.dispatchEvent(event3);
   });
 
   test('Function getGamepads()', () => {
@@ -81,24 +141,6 @@ describe('gameControl', () => {
   test('event association/deassociation of unknown event', () => {
     gameControl.on('invalidEvent', () => 'invalid event');
     gameControl.off('invalidEvent');
-  });
-
-  test('trigger event gamepadconnected', () => {
-    const event = new CustomEvent('gamepadconnected', {
-      detail: { gamepad: gamepads[0] },
-      gamepad: gamepads[0]
-    });
-    if (!event.detail) {
-      event.detail = { gamepad: gamepads[0] };
-    }
-    global.dispatchEvent(event);
-  });
-
-  test('trigger event gamepaddisconnected', () => {
-    const event = new CustomEvent('gamepaddisconnected', {
-      detail: { gamepad: gamepads[0] }
-    });
-    global.dispatchEvent(event);
   });
 
   test('checkStatus', () => {
