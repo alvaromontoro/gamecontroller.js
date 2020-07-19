@@ -2,7 +2,7 @@ const log = (message, type = 'log') => {
   if (type === 'error') {
     if (console && typeof console.error === 'function') console.error(message);
   } else {
-    if (console && typeof console.log === 'function') console.log(message);
+    if (console && typeof console.info === 'function') console.info(message);
   }
 };
 
