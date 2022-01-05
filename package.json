@@ -2,17 +2,30 @@
   "name": "gamecontroller.js",
   "version": "1.5.0",
   "description": "A JavaScript library that lets you handle, configure, and use gamepad and controllers on a browser, using the Gamepad API",
-  "main": "dist/gamecontroller.min.js",
+  "main": "dist/cjs/index.js",
+  "browser": "dist/browser/gamecontroller.min.js",
+  "types": "dist/types/index.d.ts",
+  "module": "dist/esm/index.js",
+  "source": "src/index.ts",
   "scripts": {
-    "build": "webpack --output-filename gamecontroller.min.js --mode production",
-    "build:dev": "webpack --output-filename gamecontroller.js --mode development",
-    "test": "jest --coverage"
+    "build": "npm run build:browser:dev && npm run build:browser && npm run build:esm && npm run build:cjs && npm run build:types",
+    "build:browser": "webpack --output-filename gamecontroller.min.js --mode production",
+    "build:browser:dev": "webpack --output-filename gamecontroller.js --mode development",
+    "build:types": "tsc --declaration true --emitDeclarationOnly --outDir dist/types",
+    "build:esm": "tsc --declaration false --module esnext --outDir dist/esm",
+    "build:cjs": "tsc --project ./tsconfig.json --declaration false --module commonjs --outDir dist/cjs",
+    "test": "npm run build:cjs && jest --coverage"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.13.8",
-    "jest": "^26.6.3",
-    "webpack": "^5.4.0",
-    "webpack-cli": "^4.5.0"
+    "@babel/core": "^7.16.7",
+    "@babel/plugin-transform-typescript": "^7.16.7",
+    "@babel/preset-env": "^7.16.7",
+    "@babel/preset-typescript": "^7.16.7",
+    "babel-loader": "^8.2.3",
+    "jest": "^27.4.7",
+    "typescript": "^4.5.4",
+    "webpack": "^5.65.0",
+    "webpack-cli": "^4.9.1"
   },
   "repository": {
     "type": "git",

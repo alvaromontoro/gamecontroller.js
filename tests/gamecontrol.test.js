@@ -1,5 +1,9 @@
-import gameControl from '../src/gamecontrol';
-import gamepad from '../src/gamepad';
+/**
+ * @jest-environment jsdom
+ */
+
+import gameControl from '../dist/cjs/gamecontrol';
+import gamepad from '../dist/cjs/gamepad';
 import { gamepads } from './mock.gamepads';
 
 function generateGamepads() {
