@@ -14,7 +14,8 @@
     "build:types": "tsc --declaration true --emitDeclarationOnly --outDir dist/types",
     "build:esm": "tsc --declaration false --module esnext --outDir dist/esm",
     "build:cjs": "tsc --project ./tsconfig.json --declaration false --module commonjs --outDir dist/cjs",
-    "test": "npm run build:cjs && jest --coverage"
+    "test": "npm run build:cjs && jest --coverage",
+    "serve": "http-server . -o /examples/ -d"
   },
   "devDependencies": {
     "@babel/core": "^7.16.7",
@@ -22,6 +23,7 @@
     "@babel/preset-env": "^7.16.7",
     "@babel/preset-typescript": "^7.16.7",
     "babel-loader": "^8.2.3",
+    "http-server": "^14.0.0",
     "jest": "^27.4.7",
     "typescript": "^4.5.4",
     "webpack": "^5.65.0",
