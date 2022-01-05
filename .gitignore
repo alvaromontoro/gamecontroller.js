@@ -1,4 +1,5 @@
 .DS_Store
-.github
+.github/*
+!.github/workflows
 node_modules
 coverage
