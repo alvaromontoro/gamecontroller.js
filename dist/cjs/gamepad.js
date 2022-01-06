@@ -105,7 +105,7 @@ const gamepad = {
                         this.buttonActions[buttonId][type] = callback;
                     }
                     else {
-                        (0, tools_1.error)(constants_1.MESSAGES.INVALID_BUTTON);
+                        (0, tools_1.error)(constants_1.MESSAGES.INVALID_BUTTON(eventName));
                     }
                 }
                 else if (eventName === 'start') {
@@ -131,7 +131,7 @@ const gamepad = {
                         this.buttonActions[16][type] = callback;
                     }
                     else {
-                        (0, tools_1.error)(constants_1.MESSAGES.INVALID_BUTTON);
+                        (0, tools_1.error)(constants_1.MESSAGES.INVALID_BUTTON(eventName));
                     }
                 }
                 else if (eventName.match(/^(up|down|left|right)(\d+)$/)) {
@@ -146,7 +146,7 @@ const gamepad = {
                         this.axesActions[axe][direction][type] = callback;
                     }
                     else {
-                        (0, tools_1.error)(constants_1.MESSAGES.INVALID_BUTTON);
+                        (0, tools_1.error)(constants_1.MESSAGES.INVALID_BUTTON(eventName));
                     }
                 }
                 else if (eventName.match(/^(up|down|left|right)$/)) {

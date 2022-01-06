@@ -3,7 +3,7 @@ declare const MESSAGES: {
     OFF: string;
     INVALID_PROPERTY: string;
     INVALID_VALUE_NUMBER: string;
-    INVALID_BUTTON: string;
+    INVALID_BUTTON: (name: string) => string;
     UNKNOWN_EVENT: string;
     NO_SUPPORT: string;
 };

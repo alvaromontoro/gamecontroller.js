@@ -103,7 +103,7 @@ const gamepad = {
           if (buttonId >= 0 && buttonId < this.buttons) {
             this.buttonActions[buttonId][type] = callback;
           } else {
-            error(MESSAGES.INVALID_BUTTON);
+            error(MESSAGES.INVALID_BUTTON(eventName));
           }
         } else if (eventName === 'start') {
           this.buttonActions[9][type] = callback;
@@ -121,7 +121,7 @@ const gamepad = {
           if (this.buttons >= 17) {
             this.buttonActions[16][type] = callback;
           } else {
-            error(MESSAGES.INVALID_BUTTON);
+            error(MESSAGES.INVALID_BUTTON(eventName));
           }
         } else if (eventName.match(/^(up|down|left|right)(\d+)$/)) {
           const matches = eventName.match(/^(up|down|left|right)(\d+)$/);
@@ -134,7 +134,7 @@ const gamepad = {
           if (axe >= 0 && axe < this.axes) {
             this.axesActions[axe][direction][type] = callback;
           } else {
-            error(MESSAGES.INVALID_BUTTON);
+            error(MESSAGES.INVALID_BUTTON(eventName));
           }
         } else if (eventName.match(/^(up|down|left|right)$/)) {
           const direction = eventName.match(/^(up|down|left|right)$/)?.[1] as GCDirection | undefined;
