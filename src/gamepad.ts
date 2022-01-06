@@ -1,8 +1,6 @@
 import { error, emptyEvents } from './tools';
 import { MESSAGES } from './constants';
-import type { GCDirection } from './types/direction';
-import type { GCGamepad } from './types/gamepad';
-import type { GCType } from './types/type';
+import type { GCDirection, GCGamepad, GCType } from './types';
 
 const gamepad = {
   init: function(gpad: Gamepad) {

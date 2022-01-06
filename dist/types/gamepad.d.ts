@@ -1,4 +1,4 @@
-import type { GCGamepad } from './types/gamepad';
+import type { GCGamepad } from './types';
 declare const gamepad: {
     init: (gpad: Gamepad) => GCGamepad;
 };

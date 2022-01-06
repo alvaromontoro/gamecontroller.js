@@ -1,1 +1,1 @@
-export declare type GCDisconnectCallback = (id: number) => any;
+export declare type GCDisconnectCallback = (index: number) => any;
