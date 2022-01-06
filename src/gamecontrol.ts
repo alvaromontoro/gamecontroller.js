@@ -1,8 +1,7 @@
 import { log, error, isGamepadSupported } from './tools';
 import { MESSAGES } from './constants';
 import gamepad from './gamepad';
-import { GCGamepads } from './types/gamepads';
-import { GCGamepad } from './types/gamepad';
+import type { GameControl, GCGamepads, GCGamepad, GCCallback, GCConnectCallback, GCDisconnectCallback } from './types';
 
 declare global {
   interface Window {
@@ -12,14 +11,14 @@ declare global {
   }
 }
 
-const gameControl = {
+const gameControl: GameControl = {
   gamepads: {} as GCGamepads,
   axeThreshold: [1.0], // this is an array so it can be expanded without breaking in the future
   isReady: isGamepadSupported(),
-  onConnect: function(_gamepad: GCGamepad) {},
-  onDisconnect: function(_index: number) {},
-  onBeforeCycle: function() {},
-  onAfterCycle: function() {},
+  onConnect: function(_gamepad: GCGamepad) {} as GCConnectCallback,
+  onDisconnect: function(_index: number) {} as GCDisconnectCallback,
+  onBeforeCycle: function() {} as GCCallback,
+  onAfterCycle: function() {} as GCCallback,
   getGamepads: function() {
     return this.gamepads;
   },
@@ -93,21 +92,21 @@ const gameControl = {
       }
     });
   },
-  on: function(eventName: string, callback: () => void) {
+  on: function(eventName: string, callback: GCCallback | GCConnectCallback | GCDisconnectCallback) {
     switch (eventName) {
       case 'connect':
-        this.onConnect = callback;
+        this.onConnect = callback as GCConnectCallback;
         break;
       case 'disconnect':
-        this.onDisconnect = callback;
+        this.onDisconnect = callback as GCDisconnectCallback;
         break;
       case 'beforeCycle':
       case 'beforecycle':
-        this.onBeforeCycle = callback;
+        this.onBeforeCycle = callback as GCCallback;
         break;
       case 'afterCycle':
       case 'aftercycle':
-        this.onAfterCycle = callback;
+        this.onAfterCycle = callback as GCCallback;
         break;
       default:
         error(MESSAGES.UNKNOWN_EVENT);

@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MESSAGES = exports.isGamepadSupported = exports.gameControl = void 0;
-// This file is the entry point
+// This file is the entry point for browsers, this file set's the global window.gameControl object
 const tools_1 = require("./tools");
 Object.defineProperty(exports, "isGamepadSupported", { enumerable: true, get: function () { return tools_1.isGamepadSupported; } });
 const constants_1 = require("./constants");
