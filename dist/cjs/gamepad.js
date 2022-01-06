@@ -138,7 +138,7 @@ const gamepad = {
                     const matches = eventName.match(/^(up|down|left|right)(\d+)$/);
                     if (!matches) {
                         (0, tools_1.error)(constants_1.MESSAGES.UNKNOWN_EVENT);
-                        return;
+                        return this;
                     }
                     const direction = matches[1];
                     const axe = parseInt(matches[2]);
@@ -153,7 +153,7 @@ const gamepad = {
                     const direction = eventName.match(/^(up|down|left|right)$/)?.[1];
                     if (!direction) {
                         (0, tools_1.error)(constants_1.MESSAGES.UNKNOWN_EVENT);
-                        return;
+                        return this;
                     }
                     this.axesActions[0][direction][type] = callback;
                 }

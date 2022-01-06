@@ -22,13 +22,13 @@ export interface GameControl {
   checkStatus: () => void;
   init: () => void;
   /** Triggered every time that a gamepad is connected to the browser. It returns an instance of the `gamepad` object described below. */
-  on(eventName: 'connect', callback: GCConnectCallback): any;
+  on(eventName: 'connect', callback: GCConnectCallback): GameControl;
   /** Triggered when a gamepad is disconnected from the browser. */
-  on(eventName: 'disconnect', callback: GCDisconnectCallback): any;
+  on(eventName: 'disconnect', callback: GCDisconnectCallback): GameControl;
   /** Triggered before the gamepads are checked for pressed buttons/joysticks movement (before those events are triggered). */
-  on(eventName: 'beforeCycle', callback: GCCallback): any;
+  on(eventName: 'beforeCycle', callback: GCCallback): GameControl;
   /** Triggered after the gamepads are checked for pressed buttons/joysticks movement (after those events have been triggered). */
-  on(eventName: 'afterCycle', callback: GCCallback): any;
-  on(eventName: string, callback: GCCallback): any;
-  off(eventName: string): any;
+  on(eventName: 'afterCycle', callback: GCCallback): GameControl;
+  on(eventName: string, callback: GCCallback): GameControl;
+  off(eventName: string): GameControl;
 };
