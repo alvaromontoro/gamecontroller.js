@@ -18,7 +18,7 @@
     "serve": "http-server . -o /examples/ -d"
   },
   "devDependencies": {
-    "@babel/core": "^7.17.2",
+    "@babel/core": "^7.17.4",
     "@babel/plugin-transform-typescript": "^7.16.8",
     "@babel/preset-env": "^7.16.11",
     "@babel/preset-typescript": "^7.16.7",
@@ -26,7 +26,7 @@
     "http-server": "^14.1.0",
     "jest": "^27.5.1",
     "typescript": "^4.5.5",
-    "webpack": "^5.68.0",
+    "webpack": "^5.69.0",
     "webpack-cli": "^4.9.2"
   },
   "repository": {
