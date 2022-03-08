@@ -16,7 +16,7 @@
   \************************/
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"gameControl\": function() { return /* reexport safe */ _gamecontrol__WEBPACK_IMPORTED_MODULE_3__[\"default\"]; },\n/* harmony export */   \"isGamepadSupported\": function() { return /* reexport safe */ _tools__WEBPACK_IMPORTED_MODULE_1__.isGamepadSupported; },\n/* harmony export */   \"MESSAGES\": function() { return /* reexport safe */ _constants__WEBPACK_IMPORTED_MODULE_2__.MESSAGES; }\n/* harmony export */ });\n/* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./types */ \"./src/types/index.ts\");\n/* harmony import */ var _tools__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./tools */ \"./src/tools.ts\");\n/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./constants */ \"./src/constants.ts\");\n/* harmony import */ var _gamecontrol__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./gamecontrol */ \"./src/gamecontrol.ts\");\n// This file is the entry point for browsers, this file set's the global window.gameControl object\n\n\n\n\n\nif ((0,_tools__WEBPACK_IMPORTED_MODULE_1__.isGamepadSupported)()) {\n  window.gameControl = _gamecontrol__WEBPACK_IMPORTED_MODULE_3__[\"default\"];\n} else {\n  (0,_tools__WEBPACK_IMPORTED_MODULE_1__.error)(_constants__WEBPACK_IMPORTED_MODULE_2__.MESSAGES.NO_SUPPORT);\n}\n\n\n/* harmony default export */ __webpack_exports__[\"default\"] = (_gamecontrol__WEBPACK_IMPORTED_MODULE_3__[\"default\"]);\n\n//# sourceURL=webpack://gamecontroller.js/./src/browser.ts?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"MESSAGES\": function() { return /* reexport safe */ _constants__WEBPACK_IMPORTED_MODULE_2__.MESSAGES; },\n/* harmony export */   \"gameControl\": function() { return /* reexport safe */ _gamecontrol__WEBPACK_IMPORTED_MODULE_3__[\"default\"]; },\n/* harmony export */   \"isGamepadSupported\": function() { return /* reexport safe */ _tools__WEBPACK_IMPORTED_MODULE_1__.isGamepadSupported; }\n/* harmony export */ });\n/* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./types */ \"./src/types/index.ts\");\n/* harmony import */ var _tools__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./tools */ \"./src/tools.ts\");\n/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./constants */ \"./src/constants.ts\");\n/* harmony import */ var _gamecontrol__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./gamecontrol */ \"./src/gamecontrol.ts\");\n// This file is the entry point for browsers, this file set's the global window.gameControl object\n\n\n\n\n\nif ((0,_tools__WEBPACK_IMPORTED_MODULE_1__.isGamepadSupported)()) {\n  window.gameControl = _gamecontrol__WEBPACK_IMPORTED_MODULE_3__[\"default\"];\n} else {\n  (0,_tools__WEBPACK_IMPORTED_MODULE_1__.error)(_constants__WEBPACK_IMPORTED_MODULE_2__.MESSAGES.NO_SUPPORT);\n}\n\n\n/* harmony default export */ __webpack_exports__[\"default\"] = (_gamecontrol__WEBPACK_IMPORTED_MODULE_3__[\"default\"]);\n\n//# sourceURL=webpack://gamecontroller.js/./src/browser.ts?");
 
 /***/ }),
 
@@ -56,7 +56,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _too
   \**********************/
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"isGamepadSupported\": function() { return /* binding */ isGamepadSupported; },\n/* harmony export */   \"log\": function() { return /* binding */ log; },\n/* harmony export */   \"error\": function() { return /* binding */ error; },\n/* harmony export */   \"emptyEvents\": function() { return /* binding */ emptyEvents; }\n/* harmony export */ });\nconst log = function (message) {\n  let type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'log';\n\n  if (type === 'error') {\n    if (console && typeof console.error === 'function') console.error(message);\n  } else {\n    if (console && typeof console.info === 'function') console.info(message);\n  }\n};\n\nconst error = message => log(message, 'error');\n\nconst isGamepadSupported = () => navigator.getGamepads && typeof navigator.getGamepads === 'function' || typeof navigator.webkitGetGamepads === 'function' || false;\n\nconst emptyEvents = () => ({\n  action: () => {},\n  after: () => {},\n  before: () => {}\n});\n\n\n\n//# sourceURL=webpack://gamecontroller.js/./src/tools.ts?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"emptyEvents\": function() { return /* binding */ emptyEvents; },\n/* harmony export */   \"error\": function() { return /* binding */ error; },\n/* harmony export */   \"isGamepadSupported\": function() { return /* binding */ isGamepadSupported; },\n/* harmony export */   \"log\": function() { return /* binding */ log; }\n/* harmony export */ });\nconst log = function (message) {\n  let type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'log';\n\n  if (type === 'error') {\n    if (console && typeof console.error === 'function') console.error(message);\n  } else {\n    if (console && typeof console.info === 'function') console.info(message);\n  }\n};\n\nconst error = message => log(message, 'error');\n\nconst isGamepadSupported = () => navigator.getGamepads && typeof navigator.getGamepads === 'function' || typeof navigator.webkitGetGamepads === 'function' || false;\n\nconst emptyEvents = () => ({\n  action: () => {},\n  after: () => {},\n  before: () => {}\n});\n\n\n\n//# sourceURL=webpack://gamecontroller.js/./src/tools.ts?");
 
 /***/ }),
 
@@ -66,7 +66,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
   \*****************************/
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
-eval("__webpack_require__.r(__webpack_exports__);\n\n\n\n//# sourceURL=webpack://gamecontroller.js/./src/types/action.ts?");
+eval("__webpack_require__.r(__webpack_exports__);\n\n\n//# sourceURL=webpack://gamecontroller.js/./src/types/action.ts?");
 
 /***/ }),
 
@@ -76,7 +76,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n\n\n\n//# sourceURL=webpack:/
   \***********************************/
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
-eval("__webpack_require__.r(__webpack_exports__);\n\n\n\n//# sourceURL=webpack://gamecontroller.js/./src/types/axis-actions.ts?");
+eval("__webpack_require__.r(__webpack_exports__);\n\n\n//# sourceURL=webpack://gamecontroller.js/./src/types/axis-actions.ts?");
 
 /***/ }),
 
@@ -86,7 +86,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n\n\n\n//# sourceURL=webpack:/
   \*************************************/
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
-eval("__webpack_require__.r(__webpack_exports__);\n\n\n\n//# sourceURL=webpack://gamecontroller.js/./src/types/button-actions.ts?");
+eval("__webpack_require__.r(__webpack_exports__);\n\n\n//# sourceURL=webpack://gamecontroller.js/./src/types/button-actions.ts?");
 
 /***/ }),
 
@@ -96,7 +96,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n\n\n\n//# sourceURL=webpack:/
   \*******************************/
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
-eval("__webpack_require__.r(__webpack_exports__);\n\n\n\n//# sourceURL=webpack://gamecontroller.js/./src/types/callback.ts?");
+eval("__webpack_require__.r(__webpack_exports__);\n\n\n//# sourceURL=webpack://gamecontroller.js/./src/types/callback.ts?");
 
 /***/ }),
 
@@ -106,7 +106,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n\n\n\n//# sourceURL=webpack:/
   \***************************************/
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
-eval("__webpack_require__.r(__webpack_exports__);\n\n\n\n//# sourceURL=webpack://gamecontroller.js/./src/types/connect-callback.ts?");
+eval("__webpack_require__.r(__webpack_exports__);\n\n\n//# sourceURL=webpack://gamecontroller.js/./src/types/connect-callback.ts?");
 
 /***/ }),
 
@@ -116,7 +116,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n\n\n\n//# sourceURL=webpack:/
   \********************************/
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
-eval("__webpack_require__.r(__webpack_exports__);\n\n\n\n//# sourceURL=webpack://gamecontroller.js/./src/types/direction.ts?");
+eval("__webpack_require__.r(__webpack_exports__);\n\n\n//# sourceURL=webpack://gamecontroller.js/./src/types/direction.ts?");
 
 /***/ }),
 
@@ -126,7 +126,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n\n\n\n//# sourceURL=webpack:/
   \******************************************/
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
-eval("__webpack_require__.r(__webpack_exports__);\n\n\n\n//# sourceURL=webpack://gamecontroller.js/./src/types/disconnect-callback.ts?");
+eval("__webpack_require__.r(__webpack_exports__);\n\n\n//# sourceURL=webpack://gamecontroller.js/./src/types/disconnect-callback.ts?");
 
 /***/ }),
 
@@ -136,7 +136,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n\n\n\n//# sourceURL=webpack:/
   \***********************************/
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
-eval("__webpack_require__.r(__webpack_exports__);\n;\n\n\n\n//# sourceURL=webpack://gamecontroller.js/./src/types/game-control.ts?");
+eval("__webpack_require__.r(__webpack_exports__);\n;\n\n\n//# sourceURL=webpack://gamecontroller.js/./src/types/game-control.ts?");
 
 /***/ }),
 
@@ -146,7 +146,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n;\n\n\n\n//# sourceURL=webpac
   \******************************/
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
-eval("__webpack_require__.r(__webpack_exports__);\n\n\n\n//# sourceURL=webpack://gamecontroller.js/./src/types/gamepad.ts?");
+eval("__webpack_require__.r(__webpack_exports__);\n\n\n//# sourceURL=webpack://gamecontroller.js/./src/types/gamepad.ts?");
 
 /***/ }),
 
@@ -156,7 +156,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n\n\n\n//# sourceURL=webpack:/
   \*******************************/
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
-eval("__webpack_require__.r(__webpack_exports__);\n\n\n\n//# sourceURL=webpack://gamecontroller.js/./src/types/gamepads.ts?");
+eval("__webpack_require__.r(__webpack_exports__);\n\n\n//# sourceURL=webpack://gamecontroller.js/./src/types/gamepads.ts?");
 
 /***/ }),
 
@@ -176,7 +176,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _act
   \***************************/
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
-eval("__webpack_require__.r(__webpack_exports__);\n\n\n\n//# sourceURL=webpack://gamecontroller.js/./src/types/type.ts?");
+eval("__webpack_require__.r(__webpack_exports__);\n\n\n//# sourceURL=webpack://gamecontroller.js/./src/types/type.ts?");
 
 /***/ })
 
