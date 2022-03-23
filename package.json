@@ -18,11 +18,11 @@
     "serve": "http-server . -o /examples/ -d"
   },
   "devDependencies": {
-    "@babel/core": "^7.17.7",
+    "@babel/core": "^7.17.8",
     "@babel/plugin-transform-typescript": "^7.16.8",
     "@babel/preset-env": "^7.16.11",
     "@babel/preset-typescript": "^7.16.7",
-    "babel-loader": "^8.2.3",
+    "babel-loader": "^8.2.4",
     "http-server": "^14.1.0",
     "jest": "^27.5.1",
     "typescript": "4.6.2",
