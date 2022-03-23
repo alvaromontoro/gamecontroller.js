@@ -279,7 +279,7 @@ These names are not arbitrary. They match the buttons and axes described in the 
 
 ## Examples
 
-The `examples` folder contains different examples to showcase how to use the library:
+The `examples` folder contains different examples to showcase how to use the library. To try out the examples locally run `npm run serve` in the root of this repository or try them now directly here:
 
 - [Connectivity](https://htmlpreview.github.io/?https://github.com/alvaromontoro/gamecontroller.js/blob/master/examples/example-0-connectivity.html): shows how to detect if a gamepad was connected/disconnected.
 - [Buttons and Joysticks](https://htmlpreview.github.io/?https://github.com/alvaromontoro/gamecontroller.js/blob/master/examples/example-3-buttons-and-joysticks.html): see how the buttons from your gamepad map to the default gamepad.

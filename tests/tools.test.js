@@ -1,4 +1,8 @@
-import { isGamepadSupported, log, error, emptyEvents } from '../src/tools';
+/**
+ * @jest-environment jsdom
+ */
+
+import { isGamepadSupported, log, error, emptyEvents } from '../dist/cjs/tools';
 import { gamepads } from './mock.gamepads';
 
 describe('log', () => {

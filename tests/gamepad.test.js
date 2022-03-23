@@ -1,4 +1,8 @@
-import gamepad from '../src/gamepad';
+/**
+ * @jest-environment jsdom
+ */
+
+import gamepad from '../dist/cjs/gamepad';
 import { gamepads, gamepadsFirefox } from './mock.gamepads';
 
 describe('gamepad', () => {
@@ -176,7 +180,7 @@ describe('gamepad', () => {
   test('cycle check status', () => {
     const gp = gamepad.init(gamepads[1]);
     const mockGamepads = () => gamepads;
-    global.navigator.getGamepads = mockGamepads;
+    window.navigator.getGamepads = mockGamepads;
     gp.checkStatus();
     gamepads[1].buttons[0].pressed = false;
     gamepads[1].axes[0] = 0.0;
@@ -189,11 +193,11 @@ describe('gamepad', () => {
     gamepads[2].axes = null;
     gamepads[2].buttons = null;
     const mockGamepads = () => gamepads;
-    global.navigator.getGamepads = mockGamepads;
+    window.navigator.getGamepads = mockGamepads;
     gp.checkStatus();
 
-    global.navigator.getGamepads = null;
-    global.navigator.webkitGetGamepads = mockGamepads;
+    window.navigator.getGamepads = null;
+    window.navigator.webkitGetGamepads = mockGamepads;
     gp.checkStatus();
   });
 });

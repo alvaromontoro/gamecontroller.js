@@ -1,25 +1,34 @@
 import { log, error, isGamepadSupported } from './tools';
 import { MESSAGES } from './constants';
 import gamepad from './gamepad';
+import type { GameControl, GCGamepads, GCGamepad, GCCallback, GCConnectCallback, GCDisconnectCallback } from './types';
 
-const gameControl = {
-  gamepads: {},
+declare global {
+  interface Window {
+    gamepads: {
+      [id: number]: Gamepad
+    }
+  }
+}
+
+const gameControl: GameControl = {
+  gamepads: {} as GCGamepads,
   axeThreshold: [1.0], // this is an array so it can be expanded without breaking in the future
   isReady: isGamepadSupported(),
-  onConnect: function() {},
-  onDisconnect: function() {},
-  onBeforeCycle: function() {},
-  onAfterCycle: function() {},
+  onConnect: function(_gamepad: GCGamepad) {} as GCConnectCallback,
+  onDisconnect: function(_index: number) {} as GCDisconnectCallback,
+  onBeforeCycle: function() {} as GCCallback,
+  onAfterCycle: function() {} as GCCallback,
   getGamepads: function() {
     return this.gamepads;
   },
-  getGamepad: function(id) {
+  getGamepad: function(id: number) {
     if (this.gamepads[id]) {
       return this.gamepads[id];
     }
     return null;
   },
-  set: function(property, value) {
+  set: function(property: string, value: any) {
     const properties = ['axeThreshold'];
     if (properties.indexOf(property) >= 0) {
       if (property === 'axeThreshold' && (!parseFloat(value) || value < 0.0 || value > 1.0)) {
@@ -27,7 +36,7 @@ const gameControl = {
         return;
       }
 
-      this[property] = value;
+      (this as any)[property] = value;
 
       if (property === 'axeThreshold') {
         const gps = this.getGamepads();
@@ -42,7 +51,7 @@ const gameControl = {
   },
   checkStatus: function() {
     const requestAnimationFrame =
-      window.requestAnimationFrame || window.webkitRequestAnimationFrame;
+      window.requestAnimationFrame || (window as any).webkitRequestAnimationFrame;
     const gamepadIds = Object.keys(gameControl.gamepads);
 
     gameControl.onBeforeCycle();
@@ -59,7 +68,7 @@ const gameControl = {
   },
   init: function() {
     window.addEventListener('gamepadconnected', e => {
-      const egp = e.gamepad || e.detail.gamepad;
+      const egp: GamepadEvent['gamepad'] = e.gamepad || (e as any).detail.gamepad;
       log(MESSAGES.ON);
       if (!window.gamepads) window.gamepads = {};
       if (egp) {
@@ -74,7 +83,7 @@ const gameControl = {
       }
     });
     window.addEventListener('gamepaddisconnected', e => {
-      const egp = e.gamepad || e.detail.gamepad;
+      const egp = e.gamepad || (e as any).detail.gamepad;
       log(MESSAGES.OFF);
       if (egp) {
         delete window.gamepads[egp.index];
@@ -83,21 +92,21 @@ const gameControl = {
       }
     });
   },
-  on: function(eventName, callback) {
+  on: function(eventName: string, callback: GCCallback | GCConnectCallback | GCDisconnectCallback) {
     switch (eventName) {
       case 'connect':
-        this.onConnect = callback;
+        this.onConnect = callback as GCConnectCallback;
         break;
       case 'disconnect':
-        this.onDisconnect = callback;
+        this.onDisconnect = callback as GCDisconnectCallback;
         break;
       case 'beforeCycle':
       case 'beforecycle':
-        this.onBeforeCycle = callback;
+        this.onBeforeCycle = callback as GCCallback;
         break;
       case 'afterCycle':
       case 'aftercycle':
-        this.onAfterCycle = callback;
+        this.onAfterCycle = callback as GCCallback;
         break;
       default:
         error(MESSAGES.UNKNOWN_EVENT);
@@ -105,13 +114,13 @@ const gameControl = {
     }
     return this;
   },
-  off: function(eventName) {
+  off: function(eventName: string) {
     switch (eventName) {
       case 'connect':
-        this.onConnect = function() {};
+        this.onConnect = function(_gamepad: GCGamepad) {};
         break;
       case 'disconnect':
-        this.onDisconnect = function() {};
+        this.onDisconnect = function(_index: number) {};
         break;
       case 'beforeCycle':
       case 'beforecycle':

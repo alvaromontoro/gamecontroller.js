@@ -1,9 +1,10 @@
 import { error, emptyEvents } from './tools';
 import { MESSAGES } from './constants';
+import type { GCDirection, GCGamepad, GCType } from './types';
 
 const gamepad = {
-  init: function(gpad) {
-    let gamepadPrototype = {
+  init: function(gpad: Gamepad) {
+    let gamepadPrototype: GCGamepad = {
       id: gpad.index,
       buttons: gpad.buttons.length,
       axes: Math.floor(gpad.axes.length / 2),
@@ -16,14 +17,14 @@ const gamepad = {
       buttonActions: {},
       axesActions: {},
       pressed: {},
-      set: function(property, value) {
+      set: function(property: string, value: any) {
         const properties = ['axeThreshold'];
         if (properties.indexOf(property) >= 0) {
           if (property === 'axeThreshold' && (!parseFloat(value) || value < 0.0 || value > 1.0)) {
             error(MESSAGES.INVALID_VALUE_NUMBER);
             return;
           }
-          this[property] = value;
+          (this as any)[property] = value;
         } else {
           error(MESSAGES.INVALID_PROPERTY);
         }
@@ -32,9 +33,9 @@ const gamepad = {
         if (this.hapticActuator) {
           switch (this.vibrationMode) {
             case 0:
-              return this.hapticActuator.pulse(value, duration);
+              return (this.hapticActuator as any).pulse(value, duration);
             case 1:
-              return this.hapticActuator.playEffect('dual-rumble', {
+              return (this.hapticActuator as any).playEffect('dual-rumble', {
                 duration: duration,
                 strongMagnitude: value,
                 weakMagnitude: value
@@ -42,7 +43,7 @@ const gamepad = {
           }
         }
       },
-      triggerDirectionalAction: function(id, axe, condition, x, index) {
+      triggerDirectionalAction: function(id: GCDirection, axe: number, condition: boolean, x: number, index: number) {
         if (condition && x % 2 === index) {
           if (!this.pressed[`${id}${axe}`]) {
             this.pressed[`${id}${axe}`] = true;
@@ -55,15 +56,18 @@ const gamepad = {
         }
       },
       checkStatus: function() {
-        let gp = {};
-        const gps = navigator.getGamepads
+        let gp: Gamepad | null = null;
+        const gps: ReturnType<Navigator['getGamepads']> = navigator.getGamepads
           ? navigator.getGamepads()
-          : navigator.webkitGetGamepads
-          ? navigator.webkitGetGamepads()
+          : (navigator as any).webkitGetGamepads
+          ? (navigator as any).webkitGetGamepads()
           : [];
 
         if (gps.length) {
           gp = gps[this.id];
+          if (!gp) {
+            return;
+          }
           if (gp.buttons) {
             for (let x = 0; x < this.buttons; x++) {
               if (gp.buttons[x].pressed === true) {
@@ -81,7 +85,7 @@ const gamepad = {
           if (gp.axes) {
             const modifier = gp.axes.length % 2; // Firefox hack: detects one additional axe
             for (let x = 0; x < this.axes * 2; x++) {
-              const val = gp.axes[x + modifier].toFixed(4);
+              const val = Number(gp.axes[x + modifier].toFixed(4));
               const axe = Math.floor(x / 2);
               this.axeValues[axe][x % 2] = val;
 
@@ -93,13 +97,13 @@ const gamepad = {
           }
         }
       },
-      associateEvent: function(eventName, callback, type) {
+      associateEvent: function(eventName: string, callback: () => void, type: GCType) {
         if (eventName.match(/^button\d+$/)) {
-          const buttonId = parseInt(eventName.match(/^button(\d+)$/)[1]);
+          const buttonId = parseInt(eventName.match(/^button(\d+)$/)?.[1] || "0");
           if (buttonId >= 0 && buttonId < this.buttons) {
             this.buttonActions[buttonId][type] = callback;
           } else {
-            error(MESSAGES.INVALID_BUTTON);
+            error(MESSAGES.INVALID_BUTTON(eventName));
           }
         } else if (eventName === 'start') {
           this.buttonActions[9][type] = callback;
@@ -117,33 +121,41 @@ const gamepad = {
           if (this.buttons >= 17) {
             this.buttonActions[16][type] = callback;
           } else {
-            error(MESSAGES.INVALID_BUTTON);
+            error(MESSAGES.INVALID_BUTTON(eventName));
           }
         } else if (eventName.match(/^(up|down|left|right)(\d+)$/)) {
           const matches = eventName.match(/^(up|down|left|right)(\d+)$/);
-          const direction = matches[1];
+          if (!matches) {
+            error(MESSAGES.UNKNOWN_EVENT);
+            return this;
+          }
+          const direction = matches[1] as GCDirection;
           const axe = parseInt(matches[2]);
           if (axe >= 0 && axe < this.axes) {
             this.axesActions[axe][direction][type] = callback;
           } else {
-            error(MESSAGES.INVALID_BUTTON);
+            error(MESSAGES.INVALID_BUTTON(eventName));
           }
         } else if (eventName.match(/^(up|down|left|right)$/)) {
-          const direction = eventName.match(/^(up|down|left|right)$/)[1];
+          const direction = eventName.match(/^(up|down|left|right)$/)?.[1] as GCDirection | undefined;
+          if (!direction) {
+            error(MESSAGES.UNKNOWN_EVENT);
+            return this;
+          }
           this.axesActions[0][direction][type] = callback;
         }
         return this;
       },
-      on: function(eventName, callback) {
+      on: function(eventName: string, callback: () => void) {
         return this.associateEvent(eventName, callback, 'action');
       },
-      off: function(eventName) {
+      off: function(eventName: string) {
         return this.associateEvent(eventName, function() {}, 'action');
       },
-      after: function(eventName, callback) {
+      after: function(eventName: string, callback: () => void) {
         return this.associateEvent(eventName, callback, 'after');
       },
-      before: function(eventName, callback) {
+      before: function(eventName: string, callback: () => void) {
         return this.associateEvent(eventName, callback, 'before');
       }
     };
@@ -164,19 +176,19 @@ const gamepad = {
     // check if vibration actuator exists
     if (gpad.hapticActuators) {
       // newer standard
-      if (typeof gpad.hapticActuators.pulse === 'function') {
-        gamepadPrototype.hapticActuator = gpad.hapticActuators;
+      if (typeof (gpad.hapticActuators as any).pulse === 'function') {
+        gamepadPrototype.hapticActuator = gpad.hapticActuators as any as GamepadHapticActuator;
         gamepadPrototype.vibrationMode = 0;
         gamepadPrototype.vibration = true;
-      } else if (gpad.hapticActuators[0] && typeof gpad.hapticActuators[0].pulse === 'function') {
+      } else if (gpad.hapticActuators[0] && typeof (gpad.hapticActuators[0] as any).pulse === 'function') {
         gamepadPrototype.hapticActuator = gpad.hapticActuators[0];
         gamepadPrototype.vibrationMode = 0;
         gamepadPrototype.vibration = true;
       }
-    } else if (gpad.vibrationActuator) {
+    } else if ((gpad as any).vibrationActuator) {
       // old chrome stuff
-      if (typeof gpad.vibrationActuator.playEffect === 'function') {
-        gamepadPrototype.hapticActuator = gpad.vibrationActuator;
+      if (typeof (gpad as any).vibrationActuator.playEffect === 'function') {
+        gamepadPrototype.hapticActuator = (gpad as any).vibrationActuator;
         gamepadPrototype.vibrationMode = 1;
         gamepadPrototype.vibration = true;
       }
