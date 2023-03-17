@@ -8,3 +8,5 @@ if (isGamepadSupported()) {
 } else {
   error(MESSAGES.NO_SUPPORT);
 }
+
+export default gameControl;
